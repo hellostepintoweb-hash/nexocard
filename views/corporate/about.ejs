@@ -1,0 +1,120 @@
+<%- include('../layouts/header') %>
+
+<!-- HERO SECTION -->
+<section class="py-20 bg-slate-50 border-b border-slate-200">
+  <div class="max-w-4xl mx-auto text-center px-4">
+    <span class="text-xs font-extrabold uppercase tracking-widest text-slate-500 mb-2 block">Who We Are</span>
+    <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 mb-4 tracking-tight">
+      Reinventing Modern Professional Connections
+    </h1>
+    <p class="text-lg text-slate-600 font-medium max-w-2xl mx-auto leading-relaxed">
+      NEXO bridges traditional networking with digital speed, empowering professionals to share, store, and build meaningful identity profiles instantly.
+    </p>
+  </div>
+</section>
+
+<!-- LIVE STATS SECTION -->
+<section class="py-12 bg-slate-900 text-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      <div>
+        <div class="text-3xl sm:text-4xl font-extrabold text-white mb-1"><%= stats.users %>+</div>
+        <div class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Active Users</div>
+      </div>
+      <div>
+        <div class="text-3xl sm:text-4xl font-extrabold text-white mb-1"><%= stats.cards %>+</div>
+        <div class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Cards Created</div>
+      </div>
+      <div>
+        <div class="text-3xl sm:text-4xl font-extrabold text-white mb-1"><%= stats.countries %></div>
+        <div class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Regions Served</div>
+      </div>
+      <div>
+        <div class="text-3xl sm:text-4xl font-extrabold text-white mb-1"><%= stats.uptime %></div>
+        <div class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Platform Uptime</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MISSION / VISION / STORY -->
+<section class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="nexo-glass-card p-8">
+        <div class="w-12 h-12 bg-slate-100 text-slate-900 rounded-xl flex items-center justify-center text-xl font-bold mb-6">01</div>
+        <h3 class="text-xl font-bold text-slate-900 mb-3">Our Mission</h3>
+        <p class="text-sm text-slate-600 leading-relaxed">
+          To eliminate paper card waste by delivering an intelligent, dynamic, and instantly shareable digital identity suite for modern creators and enterprises.
+        </p>
+      </div>
+
+      <div class="nexo-glass-card p-8">
+        <div class="w-12 h-12 bg-slate-100 text-slate-900 rounded-xl flex items-center justify-center text-xl font-bold mb-6">02</div>
+        <h3 class="text-xl font-bold text-slate-900 mb-3">Our Vision</h3>
+        <p class="text-sm text-slate-600 leading-relaxed">
+          To become the default global standard for business identification, digital wallet aggregation, and contact sharing across physical and digital mediums.
+        </p>
+      </div>
+
+      <div class="nexo-glass-card p-8">
+        <div class="w-12 h-12 bg-slate-100 text-slate-900 rounded-xl flex items-center justify-center text-xl font-bold mb-6">03</div>
+        <h3 class="text-xl font-bold text-slate-900 mb-3">Why NEXO?</h3>
+        <p class="text-sm text-slate-600 leading-relaxed">
+          Paper business cards are outdated the moment they are printed. NEXO ensures your contact details, social links, location, and payment profiles remain live and updated.
+        </p>
+      </div>
+    </div>
+
+    <!-- CORE VALUES -->
+    <div>
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 text-center mb-12">Driven By Strategic Values</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <div class="p-6 border border-slate-200 rounded-2xl bg-slate-50/50">
+          <i class="fa-solid fa-lightbulb text-2xl text-slate-800 mb-4 block"></i>
+          <h4 class="font-bold text-slate-900 mb-2">Innovation</h4>
+          <p class="text-xs text-slate-600 leading-relaxed">Continuous delivery of modern sharing features including QR codes and wallet cards.</p>
+        </div>
+
+        <div class="p-6 border border-slate-200 rounded-2xl bg-slate-50/50">
+          <i class="fa-solid fa-shield-halved text-2xl text-slate-800 mb-4 block"></i>
+          <h4 class="font-bold text-slate-900 mb-2">Trust & Security</h4>
+          <p class="text-xs text-slate-600 leading-relaxed">Strict data privacy controls protecting your personal and contact telemetry.</p>
+        </div>
+
+        <div class="p-6 border border-slate-200 rounded-2xl bg-slate-50/50">
+          <i class="fa-solid fa-wand-magic-sparkles text-2xl text-slate-800 mb-4 block"></i>
+          <h4 class="font-bold text-slate-900 mb-2">Simplicity</h4>
+          <p class="text-xs text-slate-600 leading-relaxed">Clean, responsive interfaces designed for friction-free contact exchanges on mobile.</p>
+        </div>
+
+        <div class="p-6 border border-slate-200 rounded-2xl bg-slate-50/50">
+          <i class="fa-solid fa-id-card text-2xl text-slate-800 mb-4 block"></i>
+          <h4 class="font-bold text-slate-900 mb-2">Identity First</h4>
+          <p class="text-xs text-slate-600 leading-relaxed">Empowerment through brand presentation customized specifically to your line of work.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FOUNDER & COMPANY SECTION -->
+    <div class="nexo-glass-card p-8 sm:p-12 bg-slate-900 text-white rounded-3xl">
+      <div class="max-w-3xl">
+        <span class="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-2 block">Corporate HQ</span>
+        <h3 class="text-2xl sm:text-3xl font-extrabold mb-4"><%= settings.companyName || 'NEXO Technologies' %></h3>
+        <p class="text-zinc-300 text-sm leading-relaxed mb-6">
+          Headquartered out of <%= settings.companyAddress || 'Chennai, Tamil Nadu, India' %>, NEXO operates as a premier digital identity platform.
+        </p>
+        <div class="flex flex-wrap gap-6 text-sm text-zinc-400 pt-4 border-t border-zinc-800">
+          <div><strong class="text-white">Email:</strong> <%= settings.supportEmail || 'support@nexocard.in' %></div>
+          <div><strong class="text-white">Phone:</strong> <%= settings.supportPhone || '+91 9876543210' %></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<%- include('../layouts/footer') %>

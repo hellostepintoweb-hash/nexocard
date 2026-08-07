@@ -1,0 +1,199 @@
+<%- include('../layouts/header') %>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+  body {
+    background-color: #f8fafc;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+  .stat-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 1.25rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+  }
+  .icon-shape {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+  .table-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+  }
+</style>
+
+<div class="container py-5">
+  
+  <!-- Header & Export Action -->
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+    <div>
+      <h2 class="fw-bold text-dark mb-1">Founder Overview & Analytics</h2>
+      <p class="text-muted small mb-0">Real-time revenue, conversion performance, and platform activity.</p>
+    </div>
+    <div class="d-flex gap-2">
+      <a href="/admin/settings" class="btn btn-outline-secondary rounded-3 fw-semibold small">
+        <i class="fa-solid fa-gear me-1"></i> System Settings
+      </a>
+      <a href="/admin/export/payments" class="btn btn-primary rounded-3 fw-bold small shadow-sm">
+        <i class="fa-solid fa-download me-1"></i> Export CSV Report
+      </a>
+    </div>
+  </div>
+
+  <!-- Financial Metrics Row -->
+  <div class="row g-3 mb-4">
+    <div class="col-sm-6 col-lg-3">
+      <div class="stat-card d-flex align-items-center justify-content-between">
+        <div>
+          <span class="text-muted small fw-semibold text-uppercase d-block mb-1">Total Revenue</span>
+          <h3 class="fw-bold text-dark mb-0">₹<%= metrics.totalRevenue.toLocaleString('en-IN') %></h3>
+        </div>
+        <div class="icon-shape bg-success-subtle text-success">
+          <i class="fa-solid fa-indian-rupee-sign"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+      <div class="stat-card d-flex align-items-center justify-content-between">
+        <div>
+          <span class="text-muted small fw-semibold text-uppercase d-block mb-1">Today's Revenue</span>
+          <h3 class="fw-bold text-dark mb-0">₹<%= metrics.todayRevenue.toLocaleString('en-IN') %></h3>
+        </div>
+        <div class="icon-shape bg-primary-subtle text-primary">
+          <i class="fa-solid fa-chart-line"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+      <div class="stat-card d-flex align-items-center justify-content-between">
+        <div>
+          <span class="text-muted small fw-semibold text-uppercase d-block mb-1">ARPU</span>
+          <h3 class="fw-bold text-dark mb-0">₹<%= metrics.arpu %></h3>
+        </div>
+        <div class="icon-shape bg-info-subtle text-info">
+          <i class="fa-solid fa-user-tag"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+      <div class="stat-card d-flex align-items-center justify-content-between">
+        <div>
+          <span class="text-muted small fw-semibold text-uppercase d-block mb-1">Successful Orders</span>
+          <h3 class="fw-bold text-dark mb-0"><%= metrics.successfulPaymentsCount %></h3>
+          <span class="text-danger small" style="font-size: 11px;"><%= metrics.failedPaymentsCount %> failed attempts</span>
+        </div>
+        <div class="icon-shape bg-warning-subtle text-warning">
+          <i class="fa-solid fa-receipt"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Operations & Platform Engagement Row -->
+  <div class="row g-3 mb-4">
+    <div class="col-sm-6 col-lg-3">
+      <div class="stat-card">
+        <span class="text-muted small fw-semibold text-uppercase d-block mb-1">Registered Users</span>
+        <div class="d-flex align-items-baseline justify-content-between">
+          <h4 class="fw-bold text-dark mb-0"><%= metrics.totalUsers %></h4>
+          <span class="badge bg-primary-subtle text-primary"><%= metrics.premiumUsersCount %> Premium</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+      <div class="stat-card">
+        <span class="text-muted small fw-semibold text-uppercase d-block mb-1">Total Digital Cards</span>
+        <h4 class="fw-bold text-dark mb-0"><%= metrics.totalCards %></h4>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+      <div class="stat-card">
+        <span class="text-muted small fw-semibold text-uppercase d-block mb-1">Card Views</span>
+        <h4 class="fw-bold text-dark mb-0"><%= metrics.totalViews.toLocaleString() %></h4>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+      <div class="stat-card">
+        <span class="text-muted small fw-semibold text-uppercase d-block mb-1">QR Scans / Wallet Saves</span>
+        <h4 class="fw-bold text-dark mb-0"><%= metrics.totalScans.toLocaleString() %> / <%= metrics.totalSaves.toLocaleString() %></h4>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Transactions Log -->
+  <div class="table-card p-4">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <h5 class="fw-bold text-dark mb-0">Recent Platform Transactions</h5>
+      <span class="badge bg-light text-dark border">Latest 10 Logs</span>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light small text-uppercase">
+          <tr>
+            <th>Invoice</th>
+            <th>Customer</th>
+            <th>Plan</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody class="small">
+          <% if (recentPayments && recentPayments.length > 0) { %>
+            <% recentPayments.forEach(p => { %>
+              <tr>
+                <td class="fw-bold text-dark"><%= p.invoiceNumber %></td>
+                <td>
+                  <div><%= p.user ? p.user.name : 'Unknown User' %></div>
+                  <small class="text-muted"><%= p.user ? p.user.email : 'N/A' %></small>
+                </td>
+                <td><%= p.plan %></td>
+                <td class="fw-bold">₹<%= p.amount %></td>
+                <td>
+                  <% if (p.status === 'SUCCESS') { %>
+                    <span class="badge bg-success-subtle text-success">SUCCESS</span>
+                  <% } else if (p.status === 'FAILED') { %>
+                    <span class="badge bg-danger-subtle text-danger">FAILED</span>
+                  <% } else { %>
+                    <span class="badge bg-warning-subtle text-warning">PENDING</span>
+                  <% } %>
+                </td>
+                <td class="text-muted"><%= new Date(p.paymentDate || p.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) %></td>
+              </tr>
+            <% }); %>
+          <% } else { %>
+            <tr>
+              <td colspan="6" class="text-center py-4 text-muted">No transaction logs recorded yet.</td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<%- include('../layouts/footer') %>

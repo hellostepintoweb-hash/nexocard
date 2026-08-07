@@ -1,0 +1,99 @@
+<%- include('../layouts/header') %>
+
+<!-- HERO & SEARCH SECTION -->
+<section class="py-16 bg-slate-50 border-b border-slate-200">
+  <div class="max-w-3xl mx-auto text-center px-4">
+    <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-3 tracking-tight">Frequently Asked Questions</h1>
+    <p class="text-slate-600 text-base mb-8">Everything you need to know about NEXO cards, features, access, and security.</p>
+    
+    <!-- Instant Search Box -->
+    <div class="relative max-w-xl mx-auto">
+      <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+      <input 
+        type="text" 
+        id="faqSearch" 
+        onkeyup="filterFAQs()" 
+        placeholder="Search questions (e.g., QR Code, Wallet, Lifetime, Pricing)..." 
+        class="w-full pl-12 pr-4 py-3.5 rounded-2xl border border-slate-200 bg-white shadow-sm text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
+      >
+    </div>
+  </div>
+</section>
+
+<!-- FAQ ACCORDION SECTION -->
+<section class="py-16 bg-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4" id="faqList">
+
+    <!-- FAQ Item Template Array -->
+    <% 
+      const faqs = [
+        { q: "What is a NEXO Digital Business Card?", a: "NEXO is an interactive digital identity card that allows professionals to share contact details, social profiles, maps, and PDF attachments via QR code or direct web link." },
+        { q: "How do I share my NEXO Card with clients?", a: "You can share your card by showing your unique QR code, sharing your custom profile URL (e.g., nexocard.in/c/yourname), or sending your generated clickable PDF." },
+        { q: "What is the Lifetime Access plan?", a: "Our Lifetime Access plan requires a single payment to grant lifetime access to your NEXO card features with zero recurring monthly subscription fees." },
+        { q: "Is payment processed securely?", a: "Yes. All payments are securely processed via Razorpay using industry-standard AES encryption." },
+        { q: "What is the NEXO Wallet feature?", a: "NEXO Wallet allows recipient contacts to bookmark and store your digital card in their localized platform account for rapid access." },
+        { q: "Can I generate and print a QR code?", a: "Yes, every NEXO Card automatically creates a high-resolution QR code that can be downloaded and printed onto physical media." },
+        { q: "Can I download my profile as a Clickable PDF?", a: "Yes, our integrated React-PDF engine turns your profile into an interactive PDF containing embedded hyperlinks." },
+        { q: "How do I update my profile details later?", a: "Log in to your NEXO dashboard, edit your contact info or theme, and save. All shared links update instantly in real time." },
+        { q: "Can I log in using Google OAuth?", a: "Yes, NEXO supports 1-Click login via Google authentication as well as standard email credentials." },
+        { q: "How do I add my office location to Google Maps?", a: "Provide your address or coordinates in the card builder, and NEXO generates an interactive Google Maps redirection button." },
+        { q: "Is my card information publicly indexable?", a: "Card profiles are accessible via your unique handle URL, but sensitive account data like passwords and payment keys are never exposed." },
+        { q: "Can I track how many people view my card?", a: "Yes! The NEXO dashboard features analytics detailing live card views, QR scans, and wallet saves." },
+        { q: "Can I change my card design and colors?", a: "Yes, NEXO offers dynamic color swatches and themes allowing you to customize your card header and accents." },
+        { q: "What happens if a payment fails?", a: "If a payment fails during checkout, no money is deducted. You can retry via Razorpay or contact our support team." },
+        { q: "Can I save contacts directly to my phone's address book?", a: "Yes, every card features a 'Save Contact to Phone' action button that downloads a .VCF vCard file directly to iOS/Android contacts." },
+        { q: "Is NEXO fully mobile-responsive?", a: "NEXO is built with Bootstrap 5 and Tailwind CSS, engineered specifically for perfect display across desktop, tablet, and mobile views." },
+        { q: "Are there limits on how many cards I can save in my Wallet?", a: "No, registered NEXO accounts can save unlimited digital business cards to their personal wallet." },
+        { q: "Where are image files hosted?", a: "Profile pictures and uploaded banner media are hosted on Cloudinary CDN for fast delivery." },
+        { q: "How do I contact customer support?", a: "You can email us at " + (settings.supportEmail || 'support@nexocard.in') + " or call " + (settings.supportPhone || '+91 9876543210') + "." },
+        { q: "What is NEXO's refund policy?", a: "We offer refunds in cases of accidental duplicate transactions or billing gateway errors as outlined in our Refund Policy." }
+      ];
+    %>
+
+    <% faqs.forEach((faq, index) => { %>
+      <div class="faq-item border border-slate-200 rounded-2xl overflow-hidden transition-all bg-white">
+        <button 
+          onclick="toggleFAQ('<%= index %>')" 
+          class="w-full text-left p-5 sm:p-6 font-bold text-slate-900 text-base sm:text-lg flex justify-between items-center gap-4 hover:bg-slate-50 transition-colors"
+        >
+          <span><%= faq.q %></span>
+          <i id="faq-icon-<%= index %>" class="fa-solid fa-chevron-down text-slate-400 text-sm transition-transform duration-200"></i>
+        </button>
+        <div id="faq-ans-<%= index %>" class="hidden px-5 pb-5 sm:px-6 sm:pb-6 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
+          <%= faq.a %>
+        </div>
+      </div>
+    <% }); %>
+
+  </div>
+</section>
+
+<script>
+  function toggleFAQ(idx) {
+    const ans = document.getElementById(`faq-ans-${idx}`);
+    const icon = document.getElementById(`faq-icon-${idx}`);
+    if (ans.classList.contains('hidden')) {
+      ans.classList.remove('hidden');
+      icon.style.transform = 'rotate(180deg)';
+    } else {
+      ans.classList.add('hidden');
+      icon.style.transform = 'rotate(0deg)';
+    }
+  }
+
+  function filterFAQs() {
+    const query = document.getElementById('faqSearch').value.toLowerCase();
+    const items = document.querySelectorAll('.faq-item');
+    
+    items.forEach(item => {
+      const text = item.innerText.toLowerCase();
+      if (text.includes(query)) {
+        item.style.display = 'block';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  }
+</script>
+
+<%- include('../layouts/footer') %>

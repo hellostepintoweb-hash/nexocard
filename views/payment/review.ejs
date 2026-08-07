@@ -1,0 +1,1106 @@
+<%- include('../layouts/header') %>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<% const activeFont = (card.theme && card.theme.fontFamily) ? card.theme.fontFamily : 'Inter'; %>
+<link href="https://fonts.googleapis.com/css2?family=<%= activeFont.replace(/\s+/g, '+') %>:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --nexo-primary: #4f46e5;
+    --nexo-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    --bg-glass: rgba(255, 255, 255, 0.85);
+
+    /* Card Theme Definitions from public.ejs */
+    --brand-color: <%= (card.theme && card.theme.primaryColor) ? card.theme.primaryColor : '#4F46E5' %>;
+    --user-font: '<%= activeFont %>', -apple-system, BlinkMacSystemFont, sans-serif;
+    
+    --bg-base: #F1F5F9;
+    --card-bg: #FFFFFF;
+    --text-title: #0F172A;
+    --text-sub: var(--brand-color);
+    --text-body: #64748B;
+    --tile-bg: rgba(241, 245, 249, 0.7);
+    --tile-border: transparent;
+  }
+
+  html[data-ui-theme="dark"] {
+    --bg-base: #0B0F19;
+    --card-bg: #0F172A;
+    --text-title: #F8FAFC;
+    --text-sub: var(--brand-color);
+    --text-body: #94A3B8;
+    --tile-bg: rgba(30, 41, 59, 0.7);
+    --tile-border: transparent;
+  }
+
+  body {
+    background: #f8fafc;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+
+  .glass-card {
+    background: var(--bg-glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid #e2e8f0;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px -15px rgba(0,0,0,0.05);
+  }
+
+  /* Embedded Live Card Design System */
+  .preview-wrapper-container {
+    font-family: var(--user-font);
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .card-wrapper {
+    width: 100%;
+    max-width: 400px;
+    background-color: var(--card-bg);
+    border-radius: 32px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 24px;
+    z-index: 1;
+    color: var(--text-body);
+  }
+
+  .card-wrapper::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('/background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.9;
+    transition: filter 0.3s ease, opacity 0.3s ease;
+  }
+
+  html[data-ui-theme="dark"] .card-wrapper::before {
+    filter: invert(1) hue-rotate(180deg);
+    opacity: 0.15;
+  }
+
+  .wave-header {
+    position: relative;
+    width: 100%;
+    height: 135px;
+    overflow: hidden;
+  }
+
+  .wave-header svg {
+    height: 100%;
+    width: 100%;
+    display: block;
+  }
+
+  .theme-toggle-node {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(8px);
+    padding: 4px 12px;
+    border-radius: 20px;
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    z-index: 10;
+  }
+
+  .profile-avatar-area {
+    text-align: center;
+    margin-top: -65px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .avatar-frame {
+    position: relative;
+    width: 124px;
+    height: 124px;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: #FFFFFF;
+    padding: 3px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  }
+
+  .avatar-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    background: #FFFFFF;
+  }
+
+  .avatar-fallback {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: var(--brand-color);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+    font-weight: 800;
+  }
+
+  .verified-badge {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 28px;
+    height: 28px;
+    z-index: 5;
+  }
+
+  .profile-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-title);
+    margin: 14px 0 6px 0;
+    letter-spacing: -0.5px;
+    line-height: 1.5;
+  }
+
+  .profile-role {
+    color: var(--brand-color);
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    line-height: 1.6;
+    margin-bottom: 6px;
+  }
+
+  .profile-company {
+    color: var(--text-body);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.6;
+  }
+
+  .sub-pill-tag {
+    margin: 16px 20px 4px 20px;
+    background: var(--tile-bg);
+    border: none;
+    padding: 12px 16px;
+    border-radius: 16px;
+    color: var(--text-title);
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+    white-space: pre-line;
+    word-break: break-word;
+    line-height: 1.5;
+  }
+
+  .action-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    padding: 0 20px;
+    margin-top: 20px;
+  }
+
+  .action-tile {
+    text-decoration: none;
+    background: var(--tile-bg);
+    border: none;
+    border-radius: 18px;
+    width: 78px;
+    height: 74px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .action-tile:hover {
+    transform: translateY(-2px);
+  }
+
+  .action-tile svg {
+    width: 22px;
+    height: 22px;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .action-tile span {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--brand-color);
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  .cta-container {
+    padding: 0 20px;
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .btn-save-contact {
+    background-color: var(--brand-color);
+    color: #FFFFFF !important;
+    height: 48px;
+    border-radius: 18px;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+
+  .btn-save-contact:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
+  }
+
+  .btn-wallet-action {
+    background-color: #0F172A;
+    color: #FFFFFF !important;
+    height: 48px;
+    border-radius: 18px;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+
+  .btn-wallet-action:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
+  }
+
+  .section-box {
+    margin: 16px 20px 0 20px;
+    background: var(--tile-bg);
+    border: none;
+    border-radius: 20px;
+    padding: 16px;
+  }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-title);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .service-card-item {
+    background: rgba(255, 255, 255, 0.4);
+    border: none;
+    border-radius: 12px;
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  html[data-ui-theme="dark"] .service-card-item {
+    background: rgba(15, 23, 42, 0.6);
+  }
+
+  .service-card-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .service-img {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: var(--tile-bg);
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .gallery-thumb {
+    width: 100%;
+    height: 100px;
+    border-radius: 10px;
+    object-fit: cover;
+    cursor: pointer;
+    border: none;
+    display: block;
+  }
+
+  .hours-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    padding: 4px 0;
+  }
+
+  .status-badge-open {
+    background: #dcfce7;
+    color: #15803d;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 700;
+  }
+
+  .status-badge-closed {
+    background: #fee2e2;
+    color: #b91c1c;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 700;
+  }
+
+  .map-inner-btn {
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.6);
+    border: none;
+    height: 46px;
+    border-radius: 14px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-title) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 12px;
+    cursor: pointer;
+  }
+
+  html[data-ui-theme="dark"] .map-inner-btn {
+    background: rgba(15, 23, 42, 0.6);
+  }
+
+  .brand-footer {
+    text-align: center;
+    margin: 20px 0 0 0;
+    height: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .brand-footer .line-1 {
+    font-size: 11px;
+    font-weight: 500;
+    color: #94A3B8;
+  }
+
+  .brand-footer .line-1 .brand-letter {
+    color: var(--brand-color);
+    font-weight: 800;
+  }
+
+  .brand-footer .line-1 .brand-name {
+    color: var(--text-title);
+    font-weight: 700;
+  }
+
+  .brand-footer .line-2 {
+    font-size: 9px;
+    font-weight: 500;
+    color: #64748B;
+  }
+
+  .brand-footer .line-2 .brand-domain {
+    color: var(--brand-color);
+    font-weight: 700;
+  }
+
+  /* Toast Notification System */
+  .nexo-toast {
+    position: fixed !important;
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px)) !important;
+    left: 50% !important;
+    -webkit-transform: translate3d(-50%, 40px, 0) !important;
+    transform: translate3d(-50%, 40px, 0) !important;
+    background-color: #0F172A !important;
+    color: #FFFFFF !important;
+    padding: 12px 24px !important;
+    border-radius: 30px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4) !important;
+    z-index: 2147483647 !important;
+    opacity: 0;
+    visibility: hidden;
+    -webkit-transition: opacity 0.3s ease, -webkit-transform 0.3s ease, visibility 0.3s !important;
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s !important;
+    pointer-events: none !important;
+    white-space: nowrap !important;
+    max-width: 90vw !important;
+    text-align: center !important;
+    will-change: transform, opacity;
+  }
+
+  .nexo-toast.toast-active {
+    opacity: 1 !important;
+    visibility: visible !important;
+    -webkit-transform: translate3d(-50%, 0, 0) !important;
+    transform: translate3d(-50%, 0, 0) !important;
+  }
+
+  .gold-star {
+    color: #FFD700;
+    fill: #FFD700;
+    filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.4));
+  }
+
+  .gold-check {
+    color: #FFD700;
+    fill: none;
+    filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.4));
+  }
+
+  /* Checkout Frame Adjustments */
+  .btn-pay-now {
+    background: var(--nexo-gradient);
+    color: #ffffff;
+    border: none;
+    border-radius: 14px;
+    font-weight: 700;
+    padding: 14px 28px;
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+    transition: all 0.2s ease;
+  }
+
+  .btn-pay-now:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(79, 70, 229, 0.4);
+    color: #ffffff;
+  }
+</style>
+
+<% 
+  const displayName = card.fullName || card.name || 'User Profile';
+
+  function getSocialUrl(platformName) {
+    if (Array.isArray(card.socialLinks)) {
+      const item = card.socialLinks.find(s => s.platform && s.platform.toLowerCase() === platformName);
+      if (item && item.url) return item.url;
+    }
+    return (card.socialLinks && card.socialLinks[platformName]) || card[platformName] || '';
+  }
+
+  const instaVal = getSocialUrl('instagram');
+  const fbVal = getSocialUrl('facebook');
+  const linkedinVal = getSocialUrl('linkedin');
+  const ytVal = getSocialUrl('youtube');
+  const twitterVal = getSocialUrl('twitter');
+  const telegramVal = getSocialUrl('telegram');
+%>
+
+<div class="container py-5">
+  <div class="row g-4 justify-content-center align-items-stretch">
+    
+    <!-- Live Card Preview -->
+    <div class="col-lg-6">
+      <div class="glass-card p-4 h-100 d-flex flex-column">
+        <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-2 mb-3">
+  <div class="d-flex align-items-center flex-wrap gap-2">
+    <span class="badge bg-primary-subtle text-primary fw-bold px-3 py-2 rounded-pill">
+      <i class="fa-solid fa-eye me-1"></i> Live Card Preview
+    </span>
+    <span class="badge bg-success-subtle text-success fw-bold px-2.5 py-1.5 rounded-pill text-wrap" style="font-size: 11px; max-width: 100%;">
+      <i class="fa-solid fa-pen-to-square me-1"></i> Editable anytime after publish
+    </span>
+  </div>
+  <small class="text-muted fw-semibold text-break ms-1 ms-sm-0">
+    <%= card.handle %>
+  </small>
+</div>
+
+        <!-- Render Exact Live Card Layout -->
+        <div class="preview-wrapper-container my-auto py-2">
+          <div class="card-wrapper">
+            
+            <div class="wave-header">
+              <div class="theme-toggle-node" id="btnThemeToggle" aria-label="Toggle Theme">
+                <span>Mode</span> 🌙
+              </div>
+              <svg viewBox="0 0 500 150" preserveAspectRatio="none">
+                <path d="M0,0 L500,0 L500,120 C380,60 260,150 0,90 Z" fill="var(--brand-color)" opacity="0.15"></path>
+                <path d="M0,0 L500,0 L500,80 C350,140 180,50 0,115 Z" fill="var(--brand-color)" opacity="0.25"></path>
+                <path d="M0,0 L500,0 L500,95 C320,135 180,65 0,100 Z" fill="var(--brand-color)" opacity="0.85"></path>
+              </svg>
+            </div>
+
+            <div class="profile-avatar-area">
+              <div class="avatar-frame">
+                <% if (card.profilePhoto) { %>
+                  <img src="<%= card.profilePhoto %>" alt="<%= displayName %>" class="avatar-img">
+                <% } else if (card.avatarUrl) { %>
+                  <img src="<%= card.avatarUrl %>" alt="<%= displayName %>" class="avatar-img">
+                <% } else { %>
+                  <div class="avatar-fallback">
+                    <%= displayName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0,2) %>
+                  </div>
+                <% } %>
+                <div class="verified-badge">
+                  <svg viewBox="0 0 24 24" style="width: 100%; height: 100%; display: block;">
+                    <circle cx="12" cy="12" r="10" fill="var(--brand-color)" />
+                    <path d="M7.5 12 L10.5 15 L16.5 9" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
+              </div>
+
+              <h3 class="profile-title"><%= displayName %></h3>
+              <% if (card.title || card.designation) { %>
+                <div class="profile-role"><%= card.title || card.designation %></div>
+              <% } %>
+              <% if (card.company) { %>
+                <div class="profile-company"><%= card.company %></div>
+              <% } %>
+            </div>
+
+            <div class="action-grid">
+              <% if (card.phone && card.phone.trim()) { %>
+                <a href="tel:<%= card.phone.replace(/[^0-9+]/g, '') %>" id="actionCallBtn" data-linktype="phone" class="action-tile">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  <span>Call</span>
+                </a>
+              <% } %>
+
+              <% if ((card.whatsapp || card.phone) && (card.whatsapp || card.phone).trim()) { %>
+                <a href="https://wa.me/<%= (card.whatsapp || card.phone).replace(/[^0-9]/g, '') %>" target="_blank" id="actionWhatsappBtn" data-linktype="whatsapp" class="action-tile">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                  <span>WhatsApp</span>
+                </a>
+              <% } %>
+
+              <% if (card.email && card.email.trim()) { %>
+                <a href="mailto:<%= card.email %>" id="actionEmailBtn" data-linktype="email" class="action-tile">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  <span>Email</span>
+                </a>
+              <% } %>
+
+              <% if (card.website && card.website.trim()) { %>
+                <a href="<%= card.website.startsWith('http') ? card.website : 'https://' + card.website %>" target="_blank" id="actionWebsiteBtn" data-linktype="website" class="action-tile">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10z"/></svg>
+                  <span>Website</span>
+                </a>
+              <% } %>
+
+              <% if (instaVal && instaVal.trim()) { %>
+                <a href="<%= instaVal.startsWith('http') ? instaVal : 'https://instagram.com/' + instaVal.replace('@', '') %>" target="_blank" id="actionInstagramBtn" data-linktype="instagram" class="action-tile">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                  <span>Instagram</span>
+                </a>
+              <% } %>
+
+              <% if (ytVal && ytVal.trim()) { %>
+                <a href="<%= ytVal.startsWith('http') ? ytVal : 'https://youtube.com/' + (ytVal.startsWith('@') ? ytVal : '@' + ytVal) %>" target="_blank" id="actionYoutubeBtn" data-linktype="youtube" class="action-tile">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+                  <span>YouTube</span>
+                </a>
+              <% } %>
+
+              <% if (fbVal && fbVal.trim()) { %>
+                <a href="<%= fbVal.startsWith('http') ? fbVal : 'https://facebook.com/' + fbVal %>" target="_blank" id="actionFacebookBtn" data-linktype="facebook" class="action-tile">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                  <span>Facebook</span>
+                </a>
+              <% } %>
+
+              <% if (linkedinVal && linkedinVal.trim()) { %>
+                <a href="<%= linkedinVal.startsWith('http') ? linkedinVal : 'https://linkedin.com/in/' + linkedinVal %>" target="_blank" id="actionLinkedinBtn" data-linktype="linkedin" class="action-tile">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                  <span>LinkedIn</span>
+                </a>
+              <% } %>
+
+              <% if (twitterVal && twitterVal.trim()) { %>
+                <a href="<%= twitterVal.startsWith('http') ? twitterVal : 'https://twitter.com/' + twitterVal.replace('@', '') %>" target="_blank" id="actionTwitterBtn" data-linktype="twitter" class="action-tile">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+                  <span>Twitter</span>
+                </a>
+              <% } %>
+
+              <% if (telegramVal && telegramVal.trim()) { %>
+                <a href="<%= telegramVal.startsWith('http') ? telegramVal : 'https://t.me/' + telegramVal.replace('@', '') %>" target="_blank" id="actionTelegramBtn" data-linktype="telegram" class="action-tile">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                  <span>Telegram</span>
+                </a>
+              <% } %>
+            </div>
+
+            <% const userSummary = card.about || card.summary; %>
+            <% if (userSummary) { %>
+              <div class="sub-pill-tag"><%= userSummary.trim() %></div>
+            <% } %>
+
+            <div class="cta-container">
+              <button id="btnSaveWallet" class="btn-wallet-action">
+                <span id="walletBtnIcon" style="display: flex; align-items: center;">
+                  <% if (typeof isSavedInWallet !== 'undefined' && isSavedInWallet) { %>
+                    <svg class="gold-check" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  <% } else { %>
+                    <svg class="gold-star" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                  <% } %>
+                </span>
+                <span id="walletBtnText"><%= (typeof isSavedInWallet !== 'undefined' && isSavedInWallet) ? 'Already Saved' : 'Save to Nexo Wallet' %></span>
+              </button>
+
+              <button id="btnSaveContact" class="btn-save-contact">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M13 17V15C13 13.3431 11.6569 12 10 12H4C2.34315 12 1 13.3431 1 15V17"/>
+                  <circle cx="7" cy="5" r="4"/>
+                  <line x1="17" y1="8" x2="17" y2="14"/>
+                  <line x1="14" y1="11" x2="20" y2="11"/>
+                </svg>
+                Save Contact to Phone
+              </button>
+            </div>
+
+            <% if (card.services && card.services.length > 0) { %>
+              <div class="section-box">
+                <div class="section-title">Services</div>
+                <% card.services.forEach(service => { %>
+                  <div class="service-card-item">
+                    <% if (service.image) { %>
+                      <img src="<%= service.image %>" alt="<%= service.title %>" class="service-img">
+                    <% } %>
+                    <div style="flex: 1;">
+                      <div style="font-size: 12px; font-weight: 700; color: var(--text-title);"><%= service.title %></div>
+                      <% if (service.description) { %>
+                        <div style="font-size: 11px; color: var(--text-body);"><%= service.description %></div>
+                      <% } %>
+                      <% if (service.price) { %>
+                        <div style="font-size: 11px; font-weight: 800; color: var(--brand-color); margin-top: 2px;"><%= service.price %></div>
+                      <% } %>
+                    </div>
+                  </div>
+                <% }); %>
+              </div>
+            <% } %>
+
+            <% if (card.gallery && card.gallery.length > 0) { %>
+              <div class="section-box">
+                <div class="section-title">Gallery</div>
+                <div class="gallery-grid">
+                  <% card.gallery.forEach(item => { %>
+                    <img src="<%= item.url %>" alt="<%= item.caption || 'Gallery Image' %>" class="gallery-thumb" onclick="openLightbox('<%= item.url %>')">
+                  <% }); %>
+                </div>
+              </div>
+            <% } %>
+
+            <% if (card.workingHours && card.workingHours.length > 0) { %>
+              <div class="section-box">
+                <% 
+                  const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                  const todayName = daysOfWeek[new Date().getDay()];
+                  const todaySchedule = card.workingHours.find(h => h.day === todayName);
+                  let isOpenNow = false;
+                  if (todaySchedule && !todaySchedule.isClosed) {
+                    const now = new Date();
+                    const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+                    if (currentTime >= todaySchedule.openTime && currentTime <= todaySchedule.closeTime) {
+                      isOpenNow = true;
+                    }
+                  }
+                %>
+                <div class="section-title">
+                  <span>Working Hours</span>
+                  <% if (isOpenNow) { %>
+                    <span class="status-badge-open">Open</span>
+                  <% } else { %>
+                    <span class="status-badge-closed">Closed</span>
+                  <% } %>
+                </div>
+                <div>
+                  <% card.workingHours.forEach(h => { %>
+                    <div class="hours-row">
+                      <span style="font-weight: 600; color: var(--text-title);"><%= h.day %></span>
+                      <span>
+                        <% if (h.isClosed) { %>
+                          <span style="color: #ef4444;">Closed</span>
+                        <% } else { %>
+                          <%= h.openTime %> - <%= h.closeTime %>
+                        <% } %>
+                      </span>
+                    </div>
+                  <% }); %>
+                </div>
+              </div>
+            <% } %>
+
+            <% if (card.address && card.address.trim()) { %>
+              <div class="section-box">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="1" y="1" width="16" height="20" rx="2" ry="2"/>
+                    <path d="M6 21v-4h6v4"/>
+                    <path d="M5 5h.01M13 5h.01M9 5h.01M9 9h.01M9 13h.01M13 13h.01M5 9h.01M5 13h.01"/>
+                  </svg>
+                  <div style="font-size: 13px; font-weight: 700; color: var(--text-title);">Office Location</div>
+                </div>
+                <div style="font-size: 12px; color: var(--text-body); margin-top: 2px; margin-bottom: 8px; padding-left: 26px; line-height: 1.4; font-weight: 500;"><%= card.address %></div>
+
+                <% 
+                  const finalMapUrl = (card.googleMapUrl && card.googleMapUrl.trim()) 
+                    ? card.googleMapUrl 
+                    : ('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(card.address));
+                %>
+
+                <a href="<%= finalMapUrl %>" target="_blank" rel="noopener noreferrer" id="actionLocationBtn" data-linktype="location" class="map-inner-btn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-title)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 11l19-9-9 19-2-8-8-2z"/>
+                  </svg>
+                  <span>Open in Google Maps ›</span>
+                </a>
+              </div>
+            <% } %>
+
+            <div class="brand-footer">
+              <div class="line-1">
+                Powered by <span class="brand-letter">N</span> <span class="brand-name">Nexo</span>
+              </div>
+              <div class="line-2">
+                Create your Digital Business Card @ <span class="brand-domain">nexocard.in</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Payment Summary & Features -->
+    <div class="col-lg-5">
+      <div class="glass-card p-4 p-md-5 h-100 d-flex flex-column justify-content-between">
+        <div>
+          <h3 class="fw-bold text-dark mb-1">Confirm Order</h3>
+          <p class="text-muted small mb-4">Activate lifetime digital publishing for your profile.</p>
+
+          <div class="p-3 bg-light rounded-4 border mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="fw-bold text-dark"><%= settings.planName %></span>
+              <span class="badge bg-success-subtle text-success fw-bold"><%= settings.paymentType %></span>
+            </div>
+            <% if (settings.offerEnabled && settings.offerText) { %>
+              <div class="text-danger small fw-semibold mb-2"><i class="fa-solid fa-fire me-1"></i> <%= settings.offerText %></div>
+            <% } %>
+            <hr class="my-2">
+            <div class="d-flex justify-content-between align-items-baseline">
+              <span class="text-muted">Total Due:</span>
+              <span class="fs-2 fw-extrabold text-dark">₹<%= settings.price %> <small class="fs-6 text-muted"><%= settings.currency %></small></span>
+            </div>
+          </div>
+
+          <h6 class="fw-bold text-dark mb-3">Included Premium Benefits:</h6>
+          <ul class="list-unstyled d-flex flex-column gap-2 small text-secondary mb-4">
+            <li><i class="fa-solid fa-check-circle text-success me-2"></i> Clickable PDF</li>
+            <li><i class="fa-solid fa-check-circle text-success me-2"></i> Unlimited Sharing</li>
+            <li><i class="fa-solid fa-check-circle text-success me-2"></i> Edit Anytime</li>
+            <li><i class="fa-solid fa-check-circle text-success me-2"></i> Dynamic QR Code</li>
+            <li><i class="fa-solid fa-check-circle text-success me-2"></i> Real-Time Analytics</li>
+          </ul>
+        </div>
+
+        <div>
+          <button id="btnPayAndPublish" class="btn btn-pay-now w-100 mb-3 d-flex align-items-center justify-content-center gap-2">
+            <i class="fa-solid fa-lock"></i> <span>Pay ₹<%= settings.price %> & Publish Card</span>
+          </button>
+          
+          <a href="/card/new" class="btn btn-outline-secondary rounded-3 w-100 py-2 text-decoration-none small fw-semibold text-center d-block">
+            <i class="fa-solid fa-arrow-left me-1"></i> Back to Editor
+          </a>
+
+          <div class="text-center mt-3">
+            <small class="text-muted align-items-center justify-content-center gap-1 d-flex" style="font-size: 11px;">
+              <i class="fa-solid fa-shield-halved text-success"></i> 256-Bit Encrypted Razorpay Checkout
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Toast element -->
+<div id="nexoToast" class="nexo-toast">Card Saved Successfully</div>
+
+<!-- Lightbox Modal -->
+<div class="modal fade" id="lightboxModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background: transparent; border: none;">
+      <div class="modal-body text-center p-0">
+        <img id="lightboxImg" src="" style="max-width: 100%; max-height: 80vh; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+  let toastTimeout = null;
+
+  function showToast(message) {
+    const toast = document.getElementById('nexoToast');
+    if (!toast) return;
+
+    toast.textContent = message;
+    toast.classList.remove('toast-active');
+    void toast.offsetWidth; 
+    toast.classList.add('toast-active');
+
+    if (toastTimeout) clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => {
+      toast.classList.remove('toast-active');
+    }, 3000);
+  }
+
+  function addMobileListener(element, callback) {
+    if (!element) return;
+    let handled = false;
+
+    element.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      handled = true;
+      callback(e);
+      setTimeout(() => { handled = false; }, 400);
+    }, { passive: false });
+
+    element.addEventListener('click', (e) => {
+      if (!handled) {
+        callback(e);
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    // Theme Switcher Initialization
+    const coreDesignSetting = "<%= (card.theme && card.theme.mode) ? card.theme.mode : 'light' %>";
+    const dynamicHTMLTargetNode = document.documentElement;
+
+    if (coreDesignSetting === 'dark') {
+      dynamicHTMLTargetNode.setAttribute('data-ui-theme', 'dark');
+    } else {
+      dynamicHTMLTargetNode.setAttribute('data-ui-theme', 'light');
+    }
+
+    const themeToggleBtn = document.getElementById('btnThemeToggle');
+    if (themeToggleBtn) {
+      addMobileListener(themeToggleBtn, () => {
+        const activeStateTheme = dynamicHTMLTargetNode.getAttribute('data-ui-theme');
+        dynamicHTMLTargetNode.setAttribute('data-ui-theme', activeStateTheme === 'dark' ? 'light' : 'dark');
+      });
+    }
+
+    // Save vCard Handler
+    const btnSaveContact = document.getElementById('btnSaveContact');
+    if (btnSaveContact) {
+      addMobileListener(btnSaveContact, (e) => {
+        const vCardData = [
+          'BEGIN:VCARD',
+          'VERSION:3.0',
+          'FN:<%= displayName %>',
+          'N:<%= displayName.split(" ").reverse().join(";") %>;;;',
+          '<% if (card.company) { %>ORG:<%= card.company %>\n<% } %>',
+          '<% if (card.title || card.designation) { %>TITLE:<%= card.title || card.designation %>\n<% } %>',
+          '<% if (card.phone) { %>TEL;TYPE=CELL:<%= card.phone.replace(/[^0-9+]/g, "") %>\n<% } %>',
+          '<% if (card.email) { %>EMAIL;TYPE=INTERNET:<%= card.email %>\n<% } %>',
+          '<% if (card.website) { %>URL:<%= card.website %>\n<% } %>',
+          '<% if (card.address) { %>ADR;TYPE=WORK:;;<%= card.address %>;;;;\n<% } %>',
+          'END:VCARD'
+        ].filter(Boolean).join('\n');
+
+        const blob = new Blob([vCardData], { type: 'text/vcard;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        
+        const tempAnchor = document.createElement('a');
+        tempAnchor.href = url;
+        tempAnchor.setAttribute('download', '<%= (card.handle || "contact").replace(/[^a-zA-Z0-9]/g, "_") %>.vcf');
+        document.body.appendChild(tempAnchor);
+        tempAnchor.click();
+        document.body.removeChild(tempAnchor);
+        
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        showToast('Opening contact prompt...');
+      });
+    }
+
+    // Wallet Save Action Button Handler
+    const walletBtn = document.getElementById('btnSaveWallet');
+    if (walletBtn) {
+      addMobileListener(walletBtn, async (e) => {
+        try {
+          const res = await fetch('/wallet/save/<%= card._id %>', { 
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'X-Requested-With': 'XMLHttpRequest'
+            }
+          });
+
+          if (res.status === 401 || res.redirected) {
+            const currentPath = window.location.pathname;
+            window.location.href = `/auth/login?redirect=${encodeURIComponent(currentPath)}`;
+            return;
+          }
+
+          const data = await res.json();
+          if (res.ok && data.success) {
+            const walletBtnText = document.getElementById('walletBtnText');
+            if (walletBtnText) walletBtnText.textContent = 'Already Saved';
+            showToast(data.message || 'Card Saved Successfully');
+          } else {
+            showToast(data.message || 'Failed to save card. Please try again.');
+          }
+        } catch (err) {
+          console.error('Save Card Error:', err);
+          showToast('Card Saved Successfully');
+        }
+      });
+    }
+
+    // Lightbox Modal Opener
+    window.openLightbox = function(url) {
+      const img = document.getElementById('lightboxImg');
+      if (img) img.src = url;
+      const modalElement = document.getElementById('lightboxModal');
+      if (modalElement && window.bootstrap) {
+        const lightboxModal = new bootstrap.Modal(modalElement);
+        lightboxModal.show();
+      }
+    };
+  });
+
+  // Razorpay Checkout Integration
+  document.getElementById('btnPayAndPublish').addEventListener('click', async function() {
+    const btn = this;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Initializing Secure Payment...';
+
+    try {
+      const orderRes = await fetch('/payment/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      
+      const orderData = await orderRes.json();
+      if (!orderData.success) {
+        alert(orderData.message || 'Failed to start payment order.');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-lock"></i> Pay & Publish Card';
+        return;
+      }
+
+      const options = {
+        key: orderData.keyId,
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: 'NEXO Platform',
+        description: orderData.planName,
+        order_id: orderData.orderId,
+        handler: async function (response) {
+          btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Verifying Payment & Building Profile...';
+          
+          const verifyRes = await fetch('/payment/verify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature
+            })
+          });
+
+          const verifyData = await verifyRes.json();
+          if (verifyData.success) {
+            window.location.href = verifyData.redirectUrl || '/payment/success';
+          } else {
+            alert(verifyData.message || 'Payment Verification Failed.');
+            window.location.href = '/payment/failed';
+          }
+        },
+        modal: {
+          ondismiss: function() {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-lock"></i> Pay & Publish Card';
+          }
+        },
+        theme: { color: '#4f46e5' }
+      };
+
+      const rzp = new Razorpay(options);
+      rzp.on('payment.failed', function () {
+        window.location.href = '/payment/failed';
+      });
+      rzp.open();
+
+    } catch (err) {
+      console.error(err);
+      alert('Unable to connect to payment gateway.');
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-lock"></i> Pay & Publish Card';
+    }
+  });
+</script>
+
+<%- include('../layouts/footer') %>

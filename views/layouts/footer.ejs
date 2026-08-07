@@ -1,0 +1,69 @@
+</main>
+
+  <!-- GLOBAL FOOTER CONTAINING ALL CORPORATE LINKS -->
+  <footer class="bg-[#0A1128] text-white pt-16 pb-12 border-t border-zinc-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+        
+        <!-- Column 1: Brand Info -->
+        <div class="space-y-4">
+          <img src="/flat_logo_white.png" alt="NEXO" class="h-8 w-auto " onerror="this.style.display='none'">
+          <h3 class="text-xl font-bold tracking-tight text-white"><%= settings.companyName || 'NEXO Technologies' %></h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            The Smartest Way to Share Your Business Identity. Create interactive, shareable digital business cards in seconds.
+          </p>
+        </div>
+
+        <!-- Column 2: Quick Links (Corporate Pages) -->
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4">Company</h4>
+          <ul class="space-y-2.5 text-sm text-zinc-300">
+            <li><a href="/" class="hover:text-white transition-colors">Home</a></li>
+            <li><a href="/about" class="hover:text-white transition-colors">About Us</a></li>
+            <li><a href="/contact" class="hover:text-white transition-colors">Contact Us</a></li>
+            <li><a href="/faq" class="hover:text-white transition-colors">Help & FAQ</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Legal Policies -->
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4">Legal & Policies</h4>
+          <ul class="space-y-2.5 text-sm text-zinc-300">
+            <li><a href="/privacy-policy" class="hover:text-white transition-colors">Privacy Policy</a></li>
+            <li><a href="/terms" class="hover:text-white transition-colors">Terms & Conditions</a></li>
+            <li><a href="/refund-policy" class="hover:text-white transition-colors">Refund Policy</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Dynamic Admin Settings Contact Details -->
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4">Support Info</h4>
+          <ul class="space-y-3 text-sm text-zinc-300">
+            <li class="flex items-start gap-2.5">
+              <i class="fa-solid fa-envelope text-zinc-400 mt-1"></i>
+              <span><%= settings.supportEmail || 'support@nexocard.in' %></span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <i class="fa-solid fa-phone text-zinc-400 mt-1"></i>
+              <span><%= settings.supportPhone || '+91 9876543210' %></span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <i class="fa-solid fa-location-dot text-zinc-400 mt-1"></i>
+              <span><%= settings.companyAddress || 'Chennai, Tamil Nadu, India' %></span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="pt-8 border-t border-zinc-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
+        <p>&copy; <%= new Date().getFullYear() %> <%= settings.companyName || 'NEXO Technologies' %>. All rights reserved.</p>
+        <p class="flex items-center gap-1">
+          Designed with precision for SaaS excellence.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

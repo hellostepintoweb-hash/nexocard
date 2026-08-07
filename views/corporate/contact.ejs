@@ -1,0 +1,121 @@
+<%- include('../layouts/header') %>
+
+<!-- HERO SECTION -->
+<section class="py-16 bg-slate-50 border-b border-slate-200">
+  <div class="max-w-4xl mx-auto text-center px-4">
+    <div class="w-16 h-16 bg-slate-900 text-white rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 shadow-lg">
+      <i class="fa-solid fa-headset"></i>
+    </div>
+    <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-3 tracking-tight">Contact NEXO</h1>
+    <p class="text-base sm:text-lg text-slate-600 font-medium max-w-xl mx-auto">
+      We're always ready to help you. Reach out to our dedicated team anytime.
+    </p>
+  </div>
+</section>
+
+<!-- CONTACT CONTENT -->
+<section class="py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Contact Info Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-16">
+      
+      <div class="nexo-glass-card p-6 text-center">
+        <div class="w-12 h-12 bg-emerald-100 text-emerald-800 rounded-xl flex items-center justify-center mx-auto mb-4 text-xl">
+          <i class="fa-solid fa-phone"></i>
+        </div>
+        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-1">Phone</h3>
+        <p class="text-sm font-semibold text-slate-700"><%= settings.supportPhone || '+91 9876543210' %></p>
+      </div>
+
+      <div class="nexo-glass-card p-6 text-center">
+        <div class="w-12 h-12 bg-indigo-100 text-indigo-800 rounded-xl flex items-center justify-center mx-auto mb-4 text-xl">
+          <i class="fa-solid fa-envelope"></i>
+        </div>
+        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-1">Email</h3>
+        <p class="text-sm font-semibold text-slate-700"><%= settings.supportEmail || 'support@nexocard.in' %></p>
+      </div>
+
+      <div class="nexo-glass-card p-6 text-center">
+        <div class="w-12 h-12 bg-amber-100 text-amber-800 rounded-xl flex items-center justify-center mx-auto mb-4 text-xl">
+          <i class="fa-solid fa-location-dot"></i>
+        </div>
+        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-1">Address</h3>
+        <p class="text-sm font-semibold text-slate-700"><%= settings.companyAddress || 'Chennai, Tamil Nadu, India' %></p>
+      </div>
+
+      <div class="nexo-glass-card p-6 text-center">
+        <div class="w-12 h-12 bg-cyan-100 text-cyan-800 rounded-xl flex items-center justify-center mx-auto mb-4 text-xl">
+          <i class="fa-solid fa-clock"></i>
+        </div>
+        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-1">Support Hours</h3>
+        <p class="text-sm font-semibold text-slate-700">Mon - Sat: 9:00 AM - 6:00 PM</p>
+      </div>
+
+    </div>
+
+    <!-- Form & Map Row -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+      
+      <!-- Contact Form -->
+      <div class="nexo-glass-card p-8">
+        <h2 class="text-xl font-bold text-slate-900 mb-6">Send Us a Message</h2>
+        <form onsubmit="event.preventDefault(); alert('Thank you for contacting NEXO! We will respond shortly.');">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Name</label>
+              <input type="text" required placeholder="John Doe" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Email</label>
+              <input type="email" required placeholder="john@example.com" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900 text-sm">
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Mobile</label>
+              <input type="tel" placeholder="+91 9876543210" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Subject</label>
+              <input type="text" required placeholder="Inquiry about NEXO" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900 text-sm">
+            </div>
+          </div>
+          <div class="mb-6">
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Message</label>
+            <textarea rows="4" required placeholder="How can we help you today?" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900 text-sm"></textarea>
+          </div>
+          <button type="submit" class="w-full py-3.5 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-all text-sm shadow-md">
+            Send Message <i class="fa-solid fa-paper-plane ml-2"></i>
+          </button>
+        </form>
+      </div>
+
+      <!-- Map & CTA Box -->
+      <div class="space-y-6">
+        <div class="nexo-glass-card overflow-hidden h-[340px] relative">
+          <iframe 
+            src="https://maps.google.com/maps?q=<%= encodeURIComponent(settings.companyAddress || 'Chennai, India') %>&t=&z=13&ie=UTF8&iwloc=&output=embed" 
+            width="100%" 
+            height="100%" 
+            style="border:0;" 
+            allowfullscreen="" 
+            loading="lazy">
+          </iframe>
+        </div>
+
+        <div class="p-8 bg-slate-900 text-white rounded-2xl text-center shadow-xl">
+          <h3 class="text-xl font-bold mb-2">Ready to Upgrade Your Networking?</h3>
+          <p class="text-zinc-400 text-sm mb-6">Join thousands of professionals sharing their credentials effortlessly.</p>
+          <a href="/card/new" class="inline-block py-3 px-8 bg-white text-slate-900 font-bold rounded-full hover:bg-slate-100 transition-all text-sm">
+            Create Your NEXO Card
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<%- include('../layouts/footer') %>

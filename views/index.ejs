@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-white antialiased">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>NEXO — The Next-Gen Digital Business Card</title>
+
+  <!-- PWA Manifest & Icons -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#000000">
+  <link rel="apple-touch-icon" href="/square_logo.png">
+
+  <!-- Fonts & Tailwind -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    /* ==========================================================================
+       1. CORE DESIGN SYSTEM & MOBILE FIXES
+       ========================================================================== */
+    :root {
+      --brand-primary: #556B2F;
+      --brand-dark: #0A1128;
+      --brand-accent: #4F46E5;
+      --bg-light: #FAFAFC;
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --card-bg: #FFFFFF;
+      --card-border: rgba(226, 232, 240, 0.8);
+      --font-main: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+      --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      --shadow-phone: 0 25px 50px -12px rgba(15, 23, 42, 0.25), 0 0 30px rgba(85, 107, 47, 0.15);
+      --shadow-premium: 0 20px 30px -10px rgba(0, 0, 0, 0.05), 0 10px 15px -5px rgba(0, 0, 0, 0.02);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      touch-action: manipulation;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    html, body {
+      width: 100%;
+      max-width: 100vw;
+      overflow-x: hidden !important;
+      position: relative;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background-color: #ffffff;
+      color: #09090b;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .header-shadow {
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 4px 12px 0 rgba(0, 0, 0, 0.02);
+    }
+
+    @keyframes gradient-shift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .animated-gradient-text {
+      background: linear-gradient(135deg, #000000 0%, #4f46e5 35%, #06b6d4 70%, #000000 100%);
+      background-size: 200% auto;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradient-shift 6s ease infinite;
+    }
+
+    .btn-auth-secondary, .btn-auth-primary, .btn-pwa-install {
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+    }
+
+    @media (min-width: 640px) {
+      .btn-auth-secondary, .btn-auth-primary, .btn-pwa-install {
+        padding: 8px 18px;
+        font-size: 13px;
+        min-height: 38px;
+      }
+    }
+
+    .btn-auth-secondary {
+      background: #FFFFFF;
+      color: var(--brand-dark);
+      border: 1px solid #e2e8f0;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-auth-secondary:hover {
+      background: #F8FAFC;
+      border-color: #cbd5e1;
+      transform: translateY(-1px);
+    }
+
+    .btn-auth-primary {
+      background: var(--brand-dark);
+      color: #FFFFFF;
+      border: 1px solid var(--brand-dark);
+      box-shadow: 0 4px 12px rgba(10, 17, 40, 0.2);
+    }
+
+    .btn-auth-primary:hover {
+      background: #152248;
+      border-color: #152248;
+      transform: translateY(-1px);
+    }
+
+    .btn-pwa-install {
+      background: #4F46E5;
+      color: #FFFFFF;
+      border: 1px solid #4F46E5;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+      cursor: pointer;
+    }
+
+    /* ==========================================================================
+       2. PRELOADER & UTILITIES
+       ========================================================================== */
+    #preloader {
+      position: fixed;
+      inset: 0;
+      background: #FFFFFF;
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.25s ease-out;
+      pointer-events: none;
+    }
+
+    .preloader-logo-wrap {
+      animation: logoPulse 0.6s ease-in-out infinite alternate;
+    }
+
+    .preloader-logo {
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+      border-radius: 16px;
+    }
+
+    .preloader-text {
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    @keyframes logoPulse {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      100% { transform: scale(1.03); opacity: 1; }
+    }
+
+    .btn-gradient {
+      background: linear-gradient(135deg, var(--brand-primary) 0%, #3B4D20 100%);
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 15px;
+      min-height: 48px;
+      padding: 12px 28px;
+      border-radius: 100px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 20px rgba(85, 107, 47, 0.3);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 100%;
+    }
+
+    .btn-gradient:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(85, 107, 47, 0.4);
+    }
+
+    .btn-secondary-demo {
+      background: #FFFFFF;
+      color: var(--brand-dark);
+      font-weight: 700;
+      font-size: 15px;
+      min-height: 48px;
+      padding: 12px 28px;
+      border-radius: 100px;
+      border: 1px solid #E2E8F0;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 100%;
+    }
+
+    .btn-secondary-demo:hover {
+      background: #F8FAFC;
+      border-color: #CBD5E1;
+      transform: translateY(-2px);
+    }
+
+    /* ==========================================================================
+       3. HERO SECTION
+       ========================================================================== */
+    .hero-container {
+      position: relative;
+      z-index: 1;
+      padding: 32px 20px 40px 20px;
+      width: 100vw;
+      max-width: 100%;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      box-sizing: border-box;
+      align-items: center;
+    }
+
+    @media (min-width: 992px) {
+      .hero-container {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        padding: 60px 5% 60px 5%;
+        max-width: 1280px;
+        gap: 40px;
+        align-items: center;
+      }
+      .btn-gradient, .btn-secondary-demo {
+        width: auto;
+      }
+    }
+
+    .hero-left {
+      width: 100%;
+      max-width: 100%;
+      text-align: left;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(85, 107, 47, 0.08);
+      border: 1px solid rgba(85, 107, 47, 0.2);
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--brand-primary);
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font-size: clamp(28px, 5.5vw, 48px);
+      line-height: 1.15;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--brand-dark);
+      margin-bottom: 16px;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(14px, 2.2vw, 17px);
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 28px;
+      font-weight: 500;
+      max-width: 580px;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      margin-bottom: 32px;
+    }
+
+    @media (min-width: 600px) {
+      .hero-cta-group {
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+
+    .category-section {
+      margin-top: 16px;
+      width: 100%;
+    }
+
+    .category-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      font-weight: 800;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .chips-wrapper {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 4px 2px 12px 2px;
+      width: 100%;
+      scrollbar-width: none;
+    }
+    .chips-wrapper::-webkit-scrollbar { display: none; }
+
+    .chip {
+      background: #FFFFFF;
+      border: 1px solid var(--card-border);
+      padding: 8px 18px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
+      flex-shrink: 0;
+      transition: all 0.25s ease;
+    }
+
+    .chip.active {
+      background: var(--brand-dark);
+      color: #FFFFFF;
+      border-color: var(--brand-dark);
+    }
+
+    /* ==========================================================================
+       4. SMARTPHONE MOCKUP
+       ========================================================================== */
+    .hero-right-preview {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .phone-mockup-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .phone-mockup {
+      width: 100%;
+      max-width: 330px;
+      height: 620px;
+      background: #000000;
+      border-radius: 40px;
+      padding: 8px;
+      box-shadow: var(--shadow-phone);
+      position: relative;
+      margin: 0 auto;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      background: #FFFFFF;
+      border-radius: 32px;
+      overflow-y: auto;
+      position: relative;
+      scrollbar-width: none;
+    }
+    .phone-screen::-webkit-scrollbar { display: none; }
+
+    /* ==========================================================================
+       5. CARD PREVIEW CONTENT
+       ========================================================================== */
+    .nexo-card-preview {
+      width: 100%;
+      min-height: 100%;
+      background: #F8FAF9;
+      position: relative;
+      padding-bottom: 20px;
+      transition: opacity 0.2s ease;
+    }
+
+    .card-svg-header {
+      position: relative;
+      width: 100%;
+      height: 110px;
+      overflow: hidden;
+    }
+
+    .mode-pill {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      background: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(8px);
+      border-radius: 100px;
+      padding: 3px 10px;
+      font-size: 9px;
+      font-weight: 700;
+      color: #FFFFFF;
+      z-index: 10;
+    }
+
+    .card-profile-block {
+      text-align: center;
+      margin-top: -38px;
+      position: relative;
+      z-index: 5;
+      padding: 0 10px;
+    }
+
+    .avatar-wrapper {
+      position: relative;
+      width: 82px;
+      height: 82px;
+      margin: 0 auto 8px auto;
+    }
+
+    .avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #FFFFFF;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .verified-badge {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      background: #556B2F;
+      border: 2px solid #FFFFFF;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+    }
+
+    .user-name {
+      font-size: 17px;
+      font-weight: 800;
+      color: #0F172A;
+    }
+
+    .user-role {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: var(--brand-primary);
+      text-transform: uppercase;
+    }
+
+    .user-company {
+      font-size: 10px;
+      color: #64748B;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+
+    .action-grid-wrap {
+      padding: 0 12px;
+      margin-bottom: 12px;
+    }
+
+    .action-grid-top {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .action-grid-bottom {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      width: 50%;
+      margin: 0 auto;
+    }
+
+    .action-btn {
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 14px;
+      padding: 10px 4px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .action-btn-icon {
+      width: 18px;
+      height: 18px;
+      color: var(--brand-primary);
+    }
+
+    .action-btn-label {
+      font-size: 8px;
+      font-weight: 700;
+      color: var(--brand-primary);
+    }
+
+    .about-pill {
+      margin: 0 12px 14px 12px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 9px;
+      color: #334155;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .cta-stack {
+      padding: 0 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .btn-nexo-wallet {
+      width: 100%;
+      background: #0B132B;
+      color: #FFFFFF;
+      padding: 10px;
+      border-radius: 16px;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-save-contact {
+      width: 100%;
+      background: var(--brand-primary);
+      color: #FFFFFF;
+      padding: 10px;
+      border-radius: 16px;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .location-box {
+      margin: 0 12px;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      padding: 12px;
+    }
+
+    .location-header {
+      font-size: 9px;
+      font-weight: 800;
+      color: #0F172A;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .location-address {
+      font-size: 8px;
+      color: #64748B;
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    .btn-maps {
+      width: 100%;
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      padding: 7px;
+      border-radius: 100px;
+      font-size: 9px;
+      font-weight: 700;
+      color: #0F172A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .card-footer {
+      text-align: center;
+      margin-top: 14px;
+      font-size: 8px;
+      color: #64748B;
+    }
+
+    .color-switcher-wrap {
+      margin-top: 16px;
+      background: #FFFFFF;
+      border: 1px solid var(--card-border);
+      padding: 6px 14px;
+      border-radius: 100px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .switcher-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .color-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .color-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid #FFFFFF;
+    }
+
+    .color-dot.active {
+      outline: 2px solid var(--brand-dark);
+    }
+
+    /* ==========================================================================
+       6. FEATURES SECTION
+       ========================================================================== */
+    .features-section {
+      padding: 80px 20px;
+      background: #FAFAFC;
+      border-top: 1px solid var(--card-border);
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .features-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .features-header {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto 56px auto;
+    }
+
+    .features-header-tag {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--brand-primary);
+      margin-bottom: 8px;
+    }
+
+    .features-header-title {
+      font-size: clamp(26px, 4vw, 36px);
+      font-weight: 800;
+      color: var(--brand-dark);
+      margin-bottom: 12px;
+    }
+
+    .features-header-subtitle {
+      font-size: 16px;
+      color: var(--text-muted);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    @media (min-width: 640px) {
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (min-width: 1024px) {
+      .features-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .feature-card {
+      background: #FFFFFF;
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 28px 24px;
+    }
+
+    .feature-icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: rgba(85, 107, 47, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+
+    .feature-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--brand-dark);
+      margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* ==========================================================================
+       7. SOCIAL PROOF SECTION
+       ========================================================================== */
+    .social-proof-section {
+      background: #FFFFFF;
+      padding: 70px 20px;
+    }
+
+    .proof-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .proof-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      font-weight: 800;
+      color: var(--brand-primary);
+      margin-bottom: 32px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    @media (min-width: 600px) {
+      .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+    }
+
+    .stat-card {
+      padding: 28px 20px;
+      border-radius: 20px;
+      background: var(--bg-light);
+      border: 1px solid var(--card-border);
+    }
+
+    .stat-number {
+      font-size: clamp(32px, 5vw, 42px);
+      font-weight: 800;
+      color: var(--brand-dark);
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col bg-white text-zinc-900 antialiased">
+
+  <!-- Preloader Screen -->
+  <div id="preloader">
+    <div class="preloader-logo-wrap">
+      <img src="/square_logo.png" alt="NEXO" class="preloader-logo" onerror="this.style.display='none'">
+    </div>
+    <div class="preloader-text">Loading NEXO...</div>
+  </div>
+
+  <!-- HEADER NAVIGATION BAR -->
+  <header class="sticky top-0 z-50 py-2.5 bg-white/90 backdrop-blur-md border-b border-zinc-100 header-shadow">
+    <div class="max-w-7xl mx-auto w-full px-3 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-y-2 gap-x-2">
+      
+      <!-- Logo Section -->
+      <a href="/" class="block shrink-0">
+        <img src="/flat_logo.png" alt="NEXO" class="w-[85px] sm:w-[150px] h-auto object-contain" onerror="this.src='https://via.placeholder.com/150x40?text=NEXO'">
+      </a>
+
+      <!-- Subtitle (Tablet/Desktop) -->
+      <div class="hidden md:flex items-center gap-3">
+        <div class="h-6 w-[1.5px] bg-zinc-200"></div>
+        <span class="animated-gradient-text text-sm lg:text-xl font-bold tracking-tight">
+          The Future of Professional Networking
+        </span>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <button id="pwa-install-btn" style="display: none;" class="btn-pwa-install">
+          📲 Install App
+        </button>
+
+        <% if (typeof user !== 'undefined' && user) { %>
+          <a href="/dashboard" class="btn-auth-primary">Dashboard</a>
+          <a href="/auth/logout" class="btn-auth-secondary">Logout</a>
+        <% } else { %>
+          <a href="/auth/login" class="btn-auth-secondary">Login</a>
+          <a href="/auth/register" class="btn-auth-primary">Register</a>
+        <% } %>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-grow">
+    
+    <!-- HERO SECTION -->
+    <div class="hero-container">
+      <div class="hero-left">
+        <div class="badge-pill">
+          <span>⚡</span> The Future of Professional Networking
+        </div>
+        <h1 class="hero-title">
+          The Smartest Way to Share Your Professional Identity.
+        </h1>
+        <p class="hero-subtitle">
+          Create your professional digital identity and instantly share your contact details, social profiles, office location, QR code, clickable PDF and much more using one beautiful NEXO Card.
+        </p>
+
+        <div class="hero-cta-group">
+          <a href="/card/new" class="btn-gradient">
+            Create Your NEXO Card
+          </a>
+          <a href="/c/sample" class="btn-secondary-demo">
+            View Live Card
+          </a>
+        </div>
+
+        <div class="category-section">
+          <div class="category-title">Select Profession:</div>
+          <div class="chips-wrapper" id="categoryChips">
+            <div class="chip active" data-index="0">Print & Media</div>
+            <div class="chip" data-index="1">Doctor</div>
+            <div class="chip" data-index="2">Lawyer</div>
+            <div class="chip" data-index="3">Architect</div>
+            <div class="chip" data-index="4">Software Engineer</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-right-preview">
+        <div class="phone-mockup-wrapper">
+          <div class="phone-mockup">
+            <div class="phone-screen">
+              <a href="/c/sample" class="nexo-card-preview block text-inherit no-underline" id="cardContainer" style="text-decoration: none; color: inherit;">
+                
+                <div class="card-svg-header">
+                  <div class="mode-pill">Mode 🌙</div>
+                  <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 100%; width: 100%; display: block;">
+                    <path d="M0,0 L500,0 L500,120 C380,60 260,150 0,90 Z" fill="var(--brand-primary)" opacity="0.15"></path>
+                    <path d="M0,0 L500,0 L500,80 C350,140 180,50 0,115 Z" fill="var(--brand-primary)" opacity="0.25"></path>
+                    <path d="M0,0 L500,0 L500,95 C320,135 180,65 0,100 Z" fill="var(--brand-primary)" opacity="0.85"></path>
+                  </svg>
+                </div>
+
+                <div class="card-profile-block">
+                  <div class="avatar-wrapper">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200" id="previewAvatar" class="avatar-img" alt="Profile">
+                    <div class="verified-badge">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                  </div>
+                  <h3 class="user-name" id="previewName">Yazhini</h3>
+                  <div class="user-role" id="previewRole">FOUNDER</div>
+                  <div class="user-company" id="previewCompany">Yazhini Printers</div>
+                </div>
+
+                <div class="action-grid-wrap">
+                  <div class="action-grid-top">
+                    <div class="action-btn">
+                      <svg class="action-btn-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                      <span class="action-btn-label">Call</span>
+                    </div>
+                    <div class="action-btn">
+                      <svg class="action-btn-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                      <span class="action-btn-label">WhatsApp</span>
+                    </div>
+                    <div class="action-btn">
+                      <svg class="action-btn-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                      <span class="action-btn-label">Email</span>
+                    </div>
+                    <div class="action-btn">
+                      <svg class="action-btn-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10z"/></svg>
+                      <span class="action-btn-label">Website</span>
+                    </div>
+                  </div>
+
+                  <div class="action-grid-bottom">
+                    <div class="action-btn">
+                      <svg class="action-btn-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                      <span class="action-btn-label">Instagram</span>
+                    </div>
+                    <div class="action-btn">
+                      <svg class="action-btn-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+                      <span class="action-btn-label">YouTube</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="about-pill" id="previewAbout">
+                  E seva Center and All Xerox Printout Services available here.
+                </div>
+
+                <div class="cta-stack">
+                  <div class="btn-nexo-wallet">
+                    <span style="color: #FFD700;">★</span> Save to Nexo Wallet
+                  </div>
+                  <div class="btn-save-contact">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="17" y1="11" x2="23" y2="11"/></svg>
+                    Save Contact to Phone
+                  </div>
+                </div>
+
+                <div class="location-box">
+                  <div class="location-header">
+                    <svg width="14" height="14" fill="none" stroke="var(--brand-primary)" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                    Office Location
+                  </div>
+                  <div class="location-address" id="previewAddress">
+                    8/31-C, Main Road, Elachipalayam,Tiruchengodu Tk, Namakkal Dt - 637202
+                  </div>
+                  <div class="btn-maps">
+                    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                    Open in Google Maps &rsaquo;
+                  </div>
+                </div>
+
+                <div class="card-footer">
+                  Powered by <strong><span style="color: var(--brand-primary);">N</span> Nexo</strong><br>
+                  Create your digital business card at <strong style="color: var(--brand-primary);">nexocard.in</strong>
+                </div>
+
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="color-switcher-wrap">
+          <span class="switcher-title">Color:</span>
+          <div class="color-dots">
+            <div class="color-dot active" style="background: #556B2F;" data-color="#556B2F"></div>
+            <div class="color-dot" style="background: #2563EB;" data-color="#2563EB"></div>
+            <div class="color-dot" style="background: #059669;" data-color="#059669"></div>
+            <div class="color-dot" style="background: #EA580C;" data-color="#EA580C"></div>
+            <div class="color-dot" style="background: #DC2626;" data-color="#DC2626"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FEATURES SECTION -->
+    <section class="features-section">
+      <div class="features-container">
+        <div class="features-header">
+          <div class="features-header-tag">Features</div>
+          <h2 class="features-header-title">Everything You Need in One NEXO Card</h2>
+          <p class="features-header-subtitle">Everything required to build your professional digital identity.</p>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon-box">📇</div>
+            <h3 class="feature-title">Digital Business Card</h3>
+            <p class="feature-desc">Beautiful digital profile.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon-box">⭐</div>
+            <h3 class="feature-title">NEXO Wallet</h3>
+            <p class="feature-desc">Save unlimited NEXO Cards.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon-box">📄</div>
+            <h3 class="feature-title">Clickable PDF</h3>
+            <p class="feature-desc">Download and share interactive PDF.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon-box">📊</div>
+            <h3 class="feature-title">Smart Analytics</h3>
+            <p class="feature-desc">Track profile views and QR scans.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon-box">📱</div>
+            <h3 class="feature-title">QR Sharing</h3>
+            <p class="feature-desc">Share instantly using QR.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon-box">🎨</div>
+            <h3 class="feature-title">Personalized Themes</h3>
+            <p class="feature-desc">Choose your own brand color.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRUST SECTION -->
+    <section class="social-proof-section">
+      <div class="proof-container">
+        <div class="proof-title">Trusted By Professionals Across India</div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number" data-target="10">10+</div>
+            <div class="stat-label">Cities Covered</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" data-target="1000">1000+</div>
+            <div class="stat-label">Professionals Joined</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" data-target="5000">5000+</div>
+            <div class="stat-label">Connections Shared</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- JAVASCRIPT -->
+  <script>
+  // Failsafe Preloader Removal Logic
+  const dismissPreloader = () => {
+    const preloader = document.getElementById('preloader');
+    if (!preloader) return;
+    preloader.style.opacity = '0';
+    setTimeout(() => { preloader.style.display = 'none'; }, 250);
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', dismissPreloader);
+  } else {
+    dismissPreloader();
+  }
+  
+  setTimeout(dismissPreloader, 1000);
+
+  // PWA Service Worker & Install Logic
+  let deferredPrompt;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    
+    // Toggle single install app button
+    const installBtn = document.getElementById('pwa-install-btn');
+    if (installBtn) installBtn.style.display = 'inline-flex';
+  });
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW fail:', err));
+    });
+  }
+
+  // Interactive Dynamic Preview Cards
+  const profiles = [
+    {
+      name: "Yazhini",
+      role: "FOUNDER",
+      company: "Yazhini Printers",
+      avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200",
+      about: "E seva Center and All Xerox Printout Services available here.",
+      address: "8/31-C, Main Road, Elachipalayam,Tiruchengodu Tk, Namakkal Dt - 637202",
+      color: "#556B2F"
+    },
+    {
+      name: "Dr. Rajesh Kumar",
+      role: "CARDIOLOGIST",
+      company: "City Heart Care Clinic",
+      avatar: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=200",
+      about: "Specialized in cardiovascular wellness, consultations, and heart care.",
+      address: "Suite 402, Apex Medical Hub, M.G. Road, Bengaluru",
+      color: "#2563EB"
+    },
+    {
+      name: "Ananya Sharma",
+      role: "SENIOR ADVOCATE",
+      company: "Legal Solutions Chambers",
+      avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=200",
+      about: "Corporate litigation, property disputes, and intellectual property attorney.",
+      address: "High Court Complex Block B, New Delhi",
+      color: "#059669"
+    },
+    {
+      name: "Vikram Mehta",
+      role: "PRINCIPAL ARCHITECT",
+      company: "Urban Form Studios",
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200",
+      about: "Sustainable residential design, commercial interiors, and landscaping.",
+      address: "12, Creative Arts District, Cyber City, Gurugram",
+      color: "#EA580C"
+    },
+    {
+      name: "Siddharth Verma",
+      role: "LEAD ARCHITECT",
+      company: "TechScale Solutions",
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200",
+      about: "Building scalable cloud microservices and enterprise SaaS platforms.",
+      address: "IT Park Phase II, HSR Layout, Bengaluru",
+      color: "#DC2626"
+    }
+  ];
+
+  let currentProfileIndex = 0;
+  const cardContainer = document.getElementById('cardContainer');
+
+  function updatePreviewCard(index) {
+    const data = profiles[index];
+    if(!cardContainer) return;
+
+    cardContainer.style.opacity = '0';
+    setTimeout(() => {
+      document.getElementById('previewName').innerText = data.name;
+      document.getElementById('previewRole').innerText = data.role;
+      document.getElementById('previewCompany').innerText = data.company;
+      document.getElementById('previewAvatar').src = data.avatar;
+      document.getElementById('previewAbout').innerText = data.about;
+      document.getElementById('previewAddress').innerText = data.address;
+      applyThemeColor(data.color);
+      cardContainer.style.opacity = '1';
+    }, 150);
+  }
+
+  let autoRotate = setInterval(() => {
+    currentProfileIndex = (currentProfileIndex + 1) % profiles.length;
+    updatePreviewCard(currentProfileIndex);
+    document.querySelectorAll('.chip').forEach((chip, idx) => {
+      chip.classList.toggle('active', idx === currentProfileIndex);
+    });
+  }, 4000);
+
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', function() {
+      clearInterval(autoRotate);
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      this.classList.add('active');
+      const idx = parseInt(this.getAttribute('data-index')) % profiles.length;
+      updatePreviewCard(idx);
+    });
+  });
+
+  function applyThemeColor(hex) {
+    document.documentElement.style.setProperty('--brand-primary', hex);
+    document.querySelectorAll('.color-dot').forEach(dot => {
+      dot.classList.toggle('active', dot.getAttribute('data-color') === hex);
+    });
+  }
+
+  document.querySelectorAll('.color-dot').forEach(dot => {
+    dot.addEventListener('click', function() {
+      applyThemeColor(this.getAttribute('data-color'));
+    });
+  });
+  </script>
+
+</body>
+</html>
+<%- include('layouts/footer') %>

@@ -1,0 +1,48 @@
+<%- include('../layouts/header') %>
+
+<section class="py-12 bg-slate-50 border-b border-slate-200">
+  <div class="max-w-4xl mx-auto px-4">
+    <h1 class="text-3xl font-extrabold text-slate-900 mb-2">Refund Policy</h1>
+    <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">
+      Clear & Transparent Terms
+    </p>
+  </div>
+</section>
+
+<section class="py-16 bg-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-slate-700 space-y-8 text-sm leading-relaxed">
+    
+    <div>
+      <h2 class="text-lg font-bold text-slate-900 mb-2">1. Digital Product Policy</h2>
+      <p>
+        Because NEXO provides instant access to digital profile tools and wallet hosting, standard digital services are generally non-refundable once activated.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="text-lg font-bold text-slate-900 mb-2">2. Conditions Eligible for Refund</h2>
+      <p>Refund requests are considered under the following conditions:</p>
+      <ul class="list-disc pl-5 space-y-1 mt-2">
+        <li>Duplicate payment charged due to gateway lag or payment processing error.</li>
+        <li>Payment debited from your account but account upgrade failed to process within 48 hours.</li>
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="text-lg font-bold text-slate-900 mb-2">3. How to Request a Refund</h2>
+      <p>
+        To initiate a review, please send your Invoice Number and Payment ID to <strong><%= settings.supportEmail || 'support@nexocard.in' %></strong> or message our support team via WhatsApp at <strong><%= settings.whatsappNumber || '+91 9876543210' %></strong>.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="text-lg font-bold text-slate-900 mb-2">4. Resolution Timeline</h2>
+      <p>
+        Approved refunds will be processed and credited back to your original payment method within 5–7 business days via Razorpay.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<%- include('../layouts/footer') %>

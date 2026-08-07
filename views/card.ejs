@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title><%= card.metaTitle || card.name + ' | Nexo Card' %></title>
+  <meta name="description" content="<%= card.metaDescription || card.about || card.summary || 'View professional profile.' %>">
+  <meta property="og:title" content="<%= card.metaTitle || card.name %>">
+  <meta property="og:description" content="<%= card.metaDescription || card.about || card.summary %>">
+  <meta property="og:type" content="profile">
+  <meta property="og:image" content="<%= card.profilePhoto || '' %>">
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- Dynamic Font Import based on User Selection -->
+  <% const activeFont = (card.theme && card.theme.fontFamily) ? card.theme.fontFamily : 'Inter'; %>
+  <link href="https://fonts.googleapis.com/css2?family=<%= activeFont.replace(/\s+/g, '+') %>:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <style>
+    :root {
+      /* Solid User Brand Color */
+      --brand-color: <%= (card.theme && card.theme.primaryColor) ? card.theme.primaryColor : '#16a34a' %>;
+      --user-font: '<%= activeFont %>', -apple-system, BlinkMacSystemFont, sans-serif;
+      
+      --bg-base: #F1F5F9;
+      --card-bg: #FFFFFF;
+      --card-border: #F1F5F9;
+      --text-title: #0F172A;
+      --text-sub: var(--brand-color);
+      --text-body: #64748B;
+      --tile-bg: #F8FAFC;
+      --tile-border: #F1F5F9;
+    }
+
+    html[data-ui-theme="dark"] {
+      --bg-base: #0B0F19;
+      --card-bg: #1E293B;
+      --card-border: #334155;
+      --text-title: #F8FAFC;
+      --text-sub: var(--brand-color);
+      --text-body: #94A3B8;
+      --tile-bg: #0F172A;
+      --tile-border: #1E293B;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-body);
+      font-family: var(--user-font);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 12px;
+      margin: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .card-wrapper {
+      width: 100%;
+      max-width: 400px;
+      background: var(--card-bg);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+      position: relative;
+      border: 1px solid var(--card-border);
+    }
+
+    /* Solid Color Wave Header */
+    .wave-header {
+      position: relative;
+      background-color: var(--brand-color);
+      height: 110px;
+      border-radius: 0 0 50% 50% / 0 0 20px 20px;
+    }
+
+    .theme-toggle-node {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(8px);
+      padding: 5px 14px;
+      border-radius: 20px;
+      color: #FFFFFF;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .profile-avatar-area {
+      text-align: center;
+      margin-top: -50px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .avatar-frame {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      margin: 0 auto;
+    }
+
+    .avatar-img {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid #FFFFFF;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+      background: #FFFFFF;
+    }
+
+    .avatar-fallback {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 4px solid #FFFFFF;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+      background-color: var(--brand-color);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    .verified-badge {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      background-color: var(--brand-color);
+      color: #FFFFFF;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid #FFFFFF;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .profile-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-title);
+      margin: 12px 0 2px 0;
+      letter-spacing: -0.5px;
+    }
+
+    .profile-role {
+      color: var(--text-sub);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .profile-company {
+      color: var(--text-body);
+      font-size: 13px;
+      font-weight: 500;
+      margin-top: 1px;
+    }
+
+    .sub-pill-tag {
+      margin: 14px auto 0 auto;
+      background: var(--tile-bg);
+      border: 1px solid var(--tile-border);
+      padding: 8px 18px;
+      border-radius: 18px;
+      width: fit-content;
+      color: var(--text-title);
+      font-size: 12px;
+      font-weight: 600;
+      max-width: 85%;
+      word-break: break-word;
+      white-space: pre-line; /* Preserves line-by-line breaks */
+      text-align: center;   /* Centers the text lines inside the pill */
+      line-height: 1.5;
+    }
+
+    /* Dynamic Flexible Action Grid */
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+      gap: 8px;
+      padding: 0 20px;
+      margin-top: 16px;
+    }
+
+    .action-tile {
+      text-decoration: none;
+      background: var(--tile-bg);
+      border: 1px solid var(--tile-border);
+      border-radius: 16px;
+      padding: 12px 4px;
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: block;
+    }
+
+    .action-tile:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .action-tile svg {
+      margin: 0 auto 4px auto;
+      display: block;
+    }
+
+    .action-tile span {
+      font-size: 11px;
+      font-weight: 700;
+      display: block;
+    }
+
+    /* Solid Primary CTA Button */
+    .btn-save-contact {
+      background-color: var(--brand-color);
+      color: #FFFFFF !important;
+      padding: 13px;
+      border-radius: 14px;
+      font-size: 13px;
+      font-weight: 700;
+      text-align: center;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .btn-save-contact:hover {
+      transform: translateY(-1px);
+      opacity: 0.95;
+    }
+
+    .btn-share-link {
+      background: var(--card-bg);
+      border: 1.5px solid var(--tile-border);
+      color: var(--brand-color) !important;
+      padding: 12px;
+      border-radius: 14px;
+      font-size: 13px;
+      font-weight: 700;
+      text-align: center;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .btn-share-link:hover {
+      background: var(--tile-bg);
+    }
+
+    /* Location Card */
+    .location-box {
+      margin: 14px 20px 0 20px;
+      background: var(--tile-bg);
+      border: 1px solid var(--tile-border);
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    .map-inner-btn {
+      text-decoration: none;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-title) !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .brand-footer {
+      text-align: center;
+      margin: 20px 0 24px 0;
+      font-size: 11px;
+      color: #94A3B8;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .brand-badge {
+      background-color: var(--brand-color);
+      color: #FFF;
+      font-weight: 800;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 10px;
+    }
+  </style>
+</head>
+<body data-ui-mode="<%= (card.theme && card.theme.mode) ? card.theme.mode : 'light' %>">
+
+  <% 
+    const instaVal = card.instagram || (card.socialLinks && card.socialLinks.instagram);
+    const ytVal = card.youtube || (card.socialLinks && card.socialLinks.youtube);
+  %>
+
+  <div class="card-wrapper">
+    
+    <!-- Top Solid Color Wave Banner -->
+    <div class="wave-header">
+      <div class="theme-toggle-node" id="btnThemeToggle" aria-label="Toggle Theme">
+        <span>Mode</span> 🌙
+      </div>
+    </div>
+
+    <!-- Avatar & Core Profile Info -->
+    <div class="profile-avatar-area">
+      <div class="avatar-frame">
+        <% if (card.profilePhoto) { %>
+          <img src="<%= card.profilePhoto %>" alt="<%= card.name %>" class="avatar-img">
+        <% } else { %>
+          <div class="avatar-fallback">
+            <%= card.name ? card.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0,2) : 'NX' %>
+          </div>
+        <% } %>
+        <div class="verified-badge">✓</div>
+      </div>
+
+      <h3 class="profile-title"><%= card.name || 'stepintoweb' %></h3>
+      <div class="profile-role"><%= card.designation || 'CEO' %></div>
+      <div class="profile-company"><%= card.company || 'Egg ATM' %></div>
+
+      <!-- Dynamic About / Summary Tag -->
+      <% const userSummary = card.about || card.summary; %>
+      <% if (userSummary) { %>
+        <div class="sub-pill-tag"> <%= userSummary %></div>
+      <% } %>
+    </div>
+
+    <!-- Quick Action Icons Grid -->
+    <div class="action-grid">
+      <% if (card.phone) { %>
+        <a href="tel:<%= card.phone.replace(/[^0-9]/g, '') %>" id="actionCallBtn" class="action-tile">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <span style="color: var(--brand-color);">Call</span>
+        </a>
+      <% } %>
+
+      <% if (card.whatsapp || card.phone) { %>
+        <a href="https://wa.me/<%= (card.whatsapp || card.phone).replace(/[^0-9]/g, '') %>" target="_blank" id="actionWhatsappBtn" class="action-tile">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          <span style="color: var(--brand-color);">WhatsApp</span>
+        </a>
+      <% } %>
+
+      <% if (card.email) { %>
+        <a href="mailto:<%= card.email %>" id="actionEmailBtn" class="action-tile">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <span style="color: var(--brand-color);">Email</span>
+        </a>
+      <% } %>
+
+      <% if (card.website) { %>
+        <a href="<%= card.website.startsWith('http') ? card.website : 'https://' + card.website %>" target="_blank" id="actionWebsiteBtn" class="action-tile">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10z"/></svg>
+          <span style="color: var(--brand-color);">Website</span>
+        </a>
+      <% } %>
+
+      <% if (instaVal) { %>
+        <a href="<%= instaVal.startsWith('http') ? instaVal : 'https://instagram.com/' + instaVal.replace('@', '') %>" target="_blank" id="actionInstagramBtn" class="action-tile">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          <span style="color: var(--brand-color);">Instagram</span>
+        </a>
+      <% } %>
+
+      <% if (ytVal) { %>
+        <a href="<%= ytVal.startsWith('http') ? ytVal : 'https://youtube.com/' + (ytVal.startsWith('@') ? ytVal : '@' + ytVal) %>" target="_blank" id="actionYoutubeBtn" class="action-tile">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+          <span style="color: var(--brand-color);">YouTube</span>
+        </a>
+      <% } %>
+    </div>
+
+    <!-- Primary Action Buttons -->
+    <div style="padding: 0 20px; margin-top: 14px; display: flex; flex-direction: column; gap: 10px;">
+      <a href="/api/cards/<%= card._id %>/vcard" id="btnSaveContact" class="btn-save-contact">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFF" stroke-width="2.5"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Save Contact to Phone
+      </a>
+
+      <button id="btnShareCard" class="btn-share-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--brand-color)" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Share Profile Link
+      </button>
+    </div>
+
+    <!-- Office Location Box -->
+    <% if (card.address) { %>
+      <div class="location-box">
+        <div style="font-size: 12px; font-weight: 700; color: var(--text-title); margin-bottom: 2px;">📍 Office Location</div>
+        <div style="font-size: 12px; color: var(--text-body); margin-bottom: 8px; padding-left: 18px;"><%= card.address %></div>
+
+        <a href="<%= card.googleMapUrl || 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(card.address) %>" target="_blank" id="actionLocationBtn" class="map-inner-btn">
+          📖 Open in Google Maps <span style="font-size: 10px; color: #94A3B8;">›</span>
+        </a>
+      </div>
+    <% } %>
+
+    <!-- Footer Branding -->
+    <div class="brand-footer">
+      Powered by <span class="brand-badge">N</span> <strong style="color: var(--text-title);">Nexo</strong>
+    </div>
+
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const coreDesignSetting = document.body.getAttribute('data-ui-mode');
+      const dynamicHTMLTargetNode = document.documentElement;
+
+      if (coreDesignSetting === 'dark') {
+        dynamicHTMLTargetNode.setAttribute('data-ui-theme', 'dark');
+      } else {
+        dynamicHTMLTargetNode.setAttribute('data-ui-theme', 'light');
+      }
+
+      const themeToggleBtn = document.getElementById('btnThemeToggle');
+      if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+          const activeStateTheme = dynamicHTMLTargetNode.getAttribute('data-ui-theme');
+          if (activeStateTheme === 'dark') {
+            dynamicHTMLTargetNode.setAttribute('data-ui-theme', 'light');
+          } else {
+            dynamicHTMLTargetNode.setAttribute('data-ui-theme', 'dark');
+          }
+        });
+      }
+
+      async function logTelemetryTrigger(interactionType, elementTargetName = '') {
+        try {
+          await fetch('/api/cards/<%= card._id %>/analytics', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ type: interactionType, buttonType: elementTargetName })
+          });
+        } catch (err) {}
+      }
+
+      function executeFallbackClipboardCopy() {
+        navigator.clipboard.writeText(window.location.href);
+        alert('Nexo Card link copied to clipboard.');
+      }
+
+      async function dispatchNativeSharePipeline() {
+        logTelemetryTrigger('share');
+        const identityProfilePayload = {
+          title: '<%= card.name %> — Nexo Card',
+          text: 'Connect with <%= card.name %> on Nexo.',
+          url: window.location.href
+        };
+
+        if (navigator.share) {
+          try {
+            await navigator.share(identityProfilePayload);
+          } catch (err) {
+            executeFallbackClipboardCopy();
+          }
+        } else {
+          executeFallbackClipboardCopy();
+        }
+      }
+
+      const callBtn = document.getElementById('actionCallBtn');
+      if (callBtn) callBtn.addEventListener('click', () => logTelemetryTrigger('click', 'call'));
+
+      const whatsappBtn = document.getElementById('actionWhatsappBtn');
+      if (whatsappBtn) whatsappBtn.addEventListener('click', () => logTelemetryTrigger('click', 'whatsapp'));
+
+      const emailBtn = document.getElementById('actionEmailBtn');
+      if (emailBtn) emailBtn.addEventListener('click', () => logTelemetryTrigger('click', 'email'));
+
+      const websiteBtn = document.getElementById('actionWebsiteBtn');
+      if (websiteBtn) websiteBtn.addEventListener('click', () => logTelemetryTrigger('click', 'website'));
+
+      const instagramBtn = document.getElementById('actionInstagramBtn');
+      if (instagramBtn) instagramBtn.addEventListener('click', () => logTelemetryTrigger('click', 'instagram'));
+
+      const youtubeBtn = document.getElementById('actionYoutubeBtn');
+      if (youtubeBtn) youtubeBtn.addEventListener('click', () => logTelemetryTrigger('click', 'youtube'));
+
+      const saveContactBtn = document.getElementById('btnSaveContact');
+      if (saveContactBtn) saveContactBtn.addEventListener('click', () => logTelemetryTrigger('save'));
+
+      const shareCardBtn = document.getElementById('btnShareCard');
+      if (shareCardBtn) shareCardBtn.addEventListener('click', () => dispatchNativeSharePipeline());
+
+      const locationBtn = document.getElementById('actionLocationBtn');
+      if (locationBtn) locationBtn.addEventListener('click', () => logTelemetryTrigger('click', 'location'));
+    });
+  </script>
+</body>
+</html>

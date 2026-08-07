@@ -1,0 +1,53 @@
+<%- include('../layouts/header') %>
+
+<section class="py-12 bg-slate-50 border-b border-slate-200">
+  <div class="max-w-4xl mx-auto px-4">
+    <h1 class="text-3xl font-extrabold text-slate-900 mb-2">Terms & Conditions</h1>
+    <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">
+      Effective Date: <%= new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) %>
+    </p>
+  </div>
+</section>
+
+<section class="py-16 bg-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-slate-700 space-y-8 text-sm leading-relaxed">
+    
+    <div>
+      <h2 class="text-lg font-bold text-slate-900 mb-2">1. Eligibility & Account Creation</h2>
+      <p>
+        By creating an account on NEXO, you certify that you are at least 18 years of age and that all information provided during registration is accurate and truthful.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="text-lg font-bold text-slate-900 mb-2">2. Lifetime Access & Payments</h2>
+      <p>
+        Lifetime access licenses grant perpetual access to the platform's core Digital Card generation features for the operational life of the platform. Fees paid for lifetime licenses are charged as one-time payments through Razorpay.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="text-lg font-bold text-slate-900 mb-2">3. Prohibited Activities</h2>
+      <p>
+        Users are prohibited from publishing unlawful, defamatory, misleading, or abusive content on their public NEXO cards. NEXO reserves the right to suspend accounts violating these terms without notice.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="text-lg font-bold text-slate-900 mb-2">4. Limitation of Liability</h2>
+      <p>
+        In no event shall <strong><%= settings.companyName || 'NEXO Technologies' %></strong> be liable for indirect, incidental, or consequential damages resulting from platform downtime or third-party service interruptions.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="text-lg font-bold text-slate-900 mb-2">5. Governing Law & Jurisdiction</h2>
+      <p>
+        These terms are governed by the laws of India. Any disputes arising under these terms shall be subject to the exclusive jurisdiction of the courts in <%= settings.companyAddress || 'Chennai, Tamil Nadu' %>.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<%- include('../layouts/footer') %>

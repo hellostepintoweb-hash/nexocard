@@ -1,0 +1,53 @@
+<%- include('../layouts/header') %>
+
+<section class="py-12 bg-slate-50 border-b border-slate-200">
+  <div class="max-w-4xl mx-auto px-4">
+    <h1 class="text-3xl font-extrabold text-slate-900 mb-2">Privacy Policy</h1>
+    <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">
+      Last Updated: <%= new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) %>
+    </p>
+  </div>
+</section>
+
+<section class="py-16 bg-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-slate-700 space-y-8 text-sm leading-relaxed">
+    
+    <div>
+      <h2 class="text-lg font-bold text-slate-900 mb-2">1. Information Collection</h2>
+      <p>
+        When you register for or utilize <strong><%= settings.companyName || 'NEXO Technologies' %></strong>, we collect personal information required to deliver our SaaS services. This includes your name, email address, contact telephone number, business profile information, and social media handles.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="text-lg font-bold text-slate-900 mb-2">2. Account & Auth Data</h2>
+      <p>
+        We support direct registration as well as Google OAuth 2.0 authentication. When using Google Login, we process your name, profile avatar, and verified email address solely for identity verification and account management.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="text-lg font-bold text-slate-900 mb-2">3. Payment & Transaction Data</h2>
+      <p>
+        Payment processing is securely managed via Razorpay. NEXO does not collect or store full credit card credentials, bank passwords, or PINs on our servers. Razorpay processes transaction telemetry under high security standards.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="text-lg font-bold text-slate-900 mb-2">4. Analytics & Third-Party Services</h2>
+      <p>
+        To render dynamic digital cards and asset uploads, NEXO interfaces with trusted third-party providers including Cloudinary (media hosting), MongoDB Atlas (secure data storage), and Render (cloud infrastructure).
+      </p>
+    </div>
+
+    <div>
+      <h2 class="text-lg font-bold text-slate-900 mb-2">5. Data Protection & User Rights</h2>
+      <p>
+        You reserve the full right to update, modify, or permanently delete your NEXO account and digital card data at any time via your user dashboard or by contacting support at <strong><%= settings.supportEmail || 'support@nexocard.in' %></strong>.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<%- include('../layouts/footer') %>
