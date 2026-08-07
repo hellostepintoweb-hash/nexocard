@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Settings = require('../models/Settings');
 const User = require('../models/User');
-const Card = require('../models/Card');
+const Card = require('../models/card');
 
 // Helper to assemble SEO & Global Data
 async function getCorporateContext(req, title, description, canonicalPath) {
