@@ -1,69 +1,85 @@
 </main>
 
-  <!-- GLOBAL FOOTER CONTAINING ALL CORPORATE LINKS -->
-  <footer class="bg-[#0A1128] text-white pt-16 pb-12 border-t border-zinc-800">
+  <!-- GLOBAL FOOTER WITH STRICT OVERRIDES FOR LOGGED-IN STYLES -->
+  <footer class="bg-[#0A1128] text-white pt-16 pb-12 border-t border-zinc-800" style="background-color: #0A1128 !important; color: #ffffff !important;">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
         
         <!-- Column 1: Brand Info -->
         <div class="space-y-4">
-          <img src="/flat_logo_white.png" alt="NEXO" class="h-8 w-auto " onerror="this.style.display='none'">
-          <h3 class="text-xl font-bold tracking-tight text-white"><%= settings.companyName || 'NEXO Technologies' %></h3>
-          <p class="text-zinc-400 text-sm leading-relaxed">
+          <div class="flex items-center gap-2">
+            <img src="/flat_logo.png" alt="NEXO" class="h-8 w-auto brightness-200 invert" onerror="this.style.display='none'">
+            <span class="text-2xl font-extrabold tracking-tight text-white" style="color: #ffffff !important; text-decoration: none !important;">Nexo</span>
+          </div>
+          <h3 class="text-xl font-bold tracking-tight text-white" style="color: #ffffff !important;"><%= (settings && settings.companyName) ? settings.companyName : 'NEXO Card' %></h3>
+          <p class="text-zinc-400 text-sm leading-relaxed" style="color: #9ca3af !important;">
             The Smartest Way to Share Your Business Identity. Create interactive, shareable digital business cards in seconds.
           </p>
         </div>
 
-        <!-- Column 2: Quick Links (Corporate Pages) -->
+        <!-- Column 2: Company Links -->
         <div>
-          <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4">Company</h4>
-          <ul class="space-y-2.5 text-sm text-zinc-300">
-            <li><a href="/" class="hover:text-white transition-colors">Home</a></li>
-            <li><a href="/about" class="hover:text-white transition-colors">About Us</a></li>
-            <li><a href="/contact" class="hover:text-white transition-colors">Contact Us</a></li>
-            <li><a href="/faq" class="hover:text-white transition-colors">Help & FAQ</a></li>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4" style="color: #9ca3af !important;">COMPANY</h4>
+          <ul class="space-y-2.5 text-sm list-none p-0 m-0">
+            <li><a href="/" class="nexo-footer-link">Home</a></li>
+            <li><a href="/about" class="nexo-footer-link">About Us</a></li>
+            <li><a href="/contact" class="nexo-footer-link">Contact Us</a></li>
+            <li><a href="/faq" class="nexo-footer-link">Help & FAQ</a></li>
           </ul>
         </div>
 
-        <!-- Column 3: Legal Policies -->
+        <!-- Column 3: Legal & Policies Links -->
         <div>
-          <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4">Legal & Policies</h4>
-          <ul class="space-y-2.5 text-sm text-zinc-300">
-            <li><a href="/privacy-policy" class="hover:text-white transition-colors">Privacy Policy</a></li>
-            <li><a href="/terms" class="hover:text-white transition-colors">Terms & Conditions</a></li>
-            <li><a href="/refund-policy" class="hover:text-white transition-colors">Refund Policy</a></li>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4" style="color: #9ca3af !important;">LEGAL & POLICIES</h4>
+          <ul class="space-y-2.5 text-sm list-none p-0 m-0">
+            <li><a href="/privacy-policy" class="nexo-footer-link">Privacy Policy</a></li>
+            <li><a href="/terms" class="nexo-footer-link">Terms & Conditions</a></li>
+            <li><a href="/refund-policy" class="nexo-footer-link">Refund Policy</a></li>
           </ul>
         </div>
 
-        <!-- Column 4: Dynamic Admin Settings Contact Details -->
+        <!-- Column 4: Support Info -->
         <div>
-          <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4">Support Info</h4>
-          <ul class="space-y-3 text-sm text-zinc-300">
-            <li class="flex items-start gap-2.5">
-              <i class="fa-solid fa-envelope text-zinc-400 mt-1"></i>
-              <span><%= settings.supportEmail || 'support@nexocard.in' %></span>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4" style="color: #9ca3af !important;">SUPPORT INFO</h4>
+          <ul class="space-y-3 text-sm list-none p-0 m-0 text-zinc-300" style="color: #d1d5db !important;">
+            <li class="flex items-center gap-2.5">
+              <i class="fa-solid fa-envelope text-zinc-400" style="color: #9ca3af !important;"></i>
+              <span><%= (settings && settings.supportEmail) ? settings.supportEmail : 'admin.nexocard@gmail.com' %></span>
+            </li>
+            <li class="flex items-center gap-2.5">
+              <i class="fa-solid fa-phone text-zinc-400" style="color: #9ca3af !important;"></i>
+              <span><%= (settings && settings.supportPhone) ? settings.supportPhone : '+91 9629861885' %></span>
             </li>
             <li class="flex items-start gap-2.5">
-              <i class="fa-solid fa-phone text-zinc-400 mt-1"></i>
-              <span><%= settings.supportPhone || '+91 9876543210' %></span>
-            </li>
-            <li class="flex items-start gap-2.5">
-              <i class="fa-solid fa-location-dot text-zinc-400 mt-1"></i>
-              <span><%= settings.companyAddress || 'Chennai, Tamil Nadu, India' %></span>
+              <i class="fa-solid fa-location-dot text-zinc-400 mt-1" style="color: #9ca3af !important;"></i>
+              <span><%= (settings && settings.companyAddress) ? settings.companyAddress : '8/31-C, Near Police Station, Elachipalayam, Namakkal - 637202' %></span>
             </li>
           </ul>
         </div>
 
       </div>
 
-      <div class="pt-8 border-t border-zinc-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
-        <p>&copy; <%= new Date().getFullYear() %> <%= settings.companyName || 'NEXO Technologies' %>. All rights reserved.</p>
-        <p class="flex items-center gap-1">
-          Designed with precision for SaaS excellence.
-        </p>
+      <!-- BOTTOM BAR (COPYRIGHT & CREDIT) -->
+      <div class="pt-8 border-t border-zinc-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500" style="border-top: 1px solid rgba(63, 63, 70, 0.5) !important; color: #71717a !important;">
+        <p class="m-0">&copy; <%= new Date().getFullYear() %> <%= (settings && settings.companyName) ? settings.companyName : 'NEXO Card' %>. All rights reserved.</p>
+        <p class="m-0">Designed with precision for SaaS excellence.</p>
       </div>
     </div>
   </footer>
+
+  <!-- STRICT CSS OVERRIDES FOR FOOTER LINKS -->
+  <style>
+    .nexo-footer-link {
+      color: #e2e8f0 !important;
+      text-decoration: none !important;
+      transition: color 0.2s ease !important;
+      display: inline-block !important;
+    }
+    .nexo-footer-link:hover {
+      color: #ffffff !important;
+      text-decoration: none !important;
+    }
+  </style>
 
 </body>
 </html>
