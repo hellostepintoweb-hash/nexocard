@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const Card = require('../models/Card');
+const Card = require('../models/card');
 const Payment = require('../models/Payment');
 const Analytics = require('../models/Analytics');
 
