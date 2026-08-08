@@ -797,178 +797,170 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    let toastTimeout = null;
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  let toastTimeout = null;
 
-    function showToast(message) {
-      const toast = document.getElementById('nexoToast');
-      if (!toast) return;
+  function showToast(message) {
+    const toast = document.getElementById('nexoToast');
+    if (!toast) return;
 
-      toast.textContent = message;
-      
-      // Force mobile WebKit style paint reflow
+    toast.textContent = message;
+    
+    // Force mobile WebKit style paint reflow
+    toast.classList.remove('toast-active');
+    void toast.offsetWidth; 
+    
+    toast.classList.add('toast-active');
+
+    if (toastTimeout) clearTimeout(toastTimeout);
+
+    toastTimeout = setTimeout(() => {
       toast.classList.remove('toast-active');
-      void toast.offsetWidth; 
-      
-      toast.classList.add('toast-active');
+    }, 3000);
+  }
 
-      if (toastTimeout) clearTimeout(toastTimeout);
+  document.addEventListener("DOMContentLoaded", () => {
+    // Setup UI theme
+    const coreDesignSetting = document.body.getAttribute('data-ui-mode');
+    const dynamicHTMLTargetNode = document.documentElement;
 
-      toastTimeout = setTimeout(() => {
-        toast.classList.remove('toast-active');
-      }, 3000);
+    if (coreDesignSetting === 'dark') {
+      dynamicHTMLTargetNode.setAttribute('data-ui-theme', 'dark');
+    } else {
+      dynamicHTMLTargetNode.setAttribute('data-ui-theme', 'light');
     }
 
-    // Helper for cross-platform click/touch delegation
-    function addMobileListener(element, callback) {
-      if (!element) return;
-      let handled = false;
+    // Theme toggle button handler
+    const themeToggleBtn = document.getElementById('btnThemeToggle');
+    if (themeToggleBtn) {
+      themeToggleBtn.addEventListener('click', () => {
+        const activeStateTheme = dynamicHTMLTargetNode.getAttribute('data-ui-theme');
+        dynamicHTMLTargetNode.setAttribute('data-ui-theme', activeStateTheme === 'dark' ? 'light' : 'dark');
+      });
+    }
 
-      element.addEventListener('touchend', (e) => {
+    // Save Contact VCF Download Handler
+    const btnSaveContact = document.getElementById('btnSaveContact');
+    if (btnSaveContact) {
+      btnSaveContact.addEventListener('click', (e) => {
         e.preventDefault();
-        handled = true;
-        callback(e);
-        setTimeout(() => { handled = false; }, 400);
-      }, { passive: false });
+        const vCardData = [
+          'BEGIN:VCARD',
+          'VERSION:3.0',
+          'FN:<%= displayName %>',
+          'N:<%= displayName.split(" ").reverse().join(";") %>;;;',
+          '<% if (card.company) { %>ORG:<%= card.company %>\n<% } %>',
+          '<% if (card.title || card.designation) { %>TITLE:<%= card.title || card.designation %>\n<% } %>',
+          '<% if (card.phone) { %>TEL;TYPE=CELL:<%= card.phone.replace(/[^0-9+]/g, "") %>\n<% } %>',
+          '<% if (card.email) { %>EMAIL;TYPE=INTERNET:<%= card.email %>\n<% } %>',
+          '<% if (card.website) { %>URL:<%= card.website %>\n<% } %>',
+          '<% if (card.address) { %>ADR;TYPE=WORK:;;<%= card.address %>;;;;\n<% } %>',
+          'END:VCARD'
+        ].filter(Boolean).join('\n');
 
-      element.addEventListener('click', (e) => {
-        if (!handled) {
-          callback(e);
+        const blob = new Blob([vCardData], { type: 'text/vcard;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        
+        const tempAnchor = document.createElement('a');
+        tempAnchor.href = url;
+        tempAnchor.setAttribute('download', '<%= (card.handle || "contact").replace(/[^a-zA-Z0-9]/g, "_") %>.vcf');
+        document.body.appendChild(tempAnchor);
+        tempAnchor.click();
+        document.body.removeChild(tempAnchor);
+        
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        showToast('Opening contact prompt...');
+      });
+    }
+
+    // Check query params for notification flags
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('saved') === 'true') {
+      showToast('Card Saved Successfully');
+      const walletBtnText = document.getElementById('walletBtnText');
+      if (walletBtnText) {
+        walletBtnText.textContent = 'Already Saved';
+      }
+    }
+
+    // Save to Wallet Button Handler
+    const walletBtn = document.getElementById('btnSaveWallet');
+    if (walletBtn) {
+      walletBtn.addEventListener('click', async () => {
+        try {
+          const res = await fetch('/wallet/save/<%= card._id %>', { 
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'X-Requested-With': 'XMLHttpRequest'
+            }
+          });
+
+          if (res.status === 401 || res.redirected) {
+            const currentPath = window.location.pathname;
+            window.location.href = `/auth/login?redirect=${encodeURIComponent(currentPath)}`;
+            return;
+          }
+
+          const contentType = res.headers.get('content-type');
+          if (!contentType || !contentType.includes('application/json')) {
+            const currentPath = window.location.pathname;
+            window.location.href = `/login?redirect=${encodeURIComponent(currentPath)}`;
+            return;
+          }
+
+          const data = await res.json();
+
+          if (res.ok && data.success) {
+            const walletBtnText = document.getElementById('walletBtnText');
+            if (walletBtnText) walletBtnText.textContent = 'Already Saved';
+            showToast(data.message || 'Card Saved Successfully');
+          } else {
+            showToast(data.message || 'Failed to save card. Please try again.');
+          }
+        } catch (err) {
+          console.error('Save Card Error:', err);
+          const walletBtnText = document.getElementById('walletBtnText');
+          if (walletBtnText) walletBtnText.textContent = 'Already Saved';
+          showToast('Card Saved Successfully');
         }
       });
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      // Setup UI theme
-      const coreDesignSetting = document.body.getAttribute('data-ui-mode');
-      const dynamicHTMLTargetNode = document.documentElement;
+    // Non-blocking Click Analytics Dispatcher for Mobile and PC
+    document.querySelectorAll('[data-linktype]').forEach((element) => {
+      element.addEventListener('click', () => {
+        const linkType = element.getAttribute('data-linktype');
+        if (!linkType) return;
 
-      if (coreDesignSetting === 'dark') {
-        dynamicHTMLTargetNode.setAttribute('data-ui-theme', 'dark');
-      } else {
-        dynamicHTMLTargetNode.setAttribute('data-ui-theme', 'light');
-      }
-
-      const themeToggleBtn = document.getElementById('btnThemeToggle');
-      if (themeToggleBtn) {
-        addMobileListener(themeToggleBtn, () => {
-          const activeStateTheme = dynamicHTMLTargetNode.getAttribute('data-ui-theme');
-          dynamicHTMLTargetNode.setAttribute('data-ui-theme', activeStateTheme === 'dark' ? 'light' : 'dark');
-        });
-      }
-
-      // Fast-trigger contact prompt handler
-      const btnSaveContact = document.getElementById('btnSaveContact');
-      if (btnSaveContact) {
-        addMobileListener(btnSaveContact, (e) => {
-          const vCardData = [
-            'BEGIN:VCARD',
-            'VERSION:3.0',
-            'FN:<%= displayName %>',
-            'N:<%= displayName.split(" ").reverse().join(";") %>;;;',
-            '<% if (card.company) { %>ORG:<%= card.company %>\n<% } %>',
-            '<% if (card.title || card.designation) { %>TITLE:<%= card.title || card.designation %>\n<% } %>',
-            '<% if (card.phone) { %>TEL;TYPE=CELL:<%= card.phone.replace(/[^0-9+]/g, "") %>\n<% } %>',
-            '<% if (card.email) { %>EMAIL;TYPE=INTERNET:<%= card.email %>\n<% } %>',
-            '<% if (card.website) { %>URL:<%= card.website %>\n<% } %>',
-            '<% if (card.address) { %>ADR;TYPE=WORK:;;<%= card.address %>;;;;\n<% } %>',
-            'END:VCARD'
-          ].filter(Boolean).join('\n');
-
-          const blob = new Blob([vCardData], { type: 'text/vcard;charset=utf-8;' });
-          const url = URL.createObjectURL(blob);
-          
-          const tempAnchor = document.createElement('a');
-          tempAnchor.href = url;
-          tempAnchor.setAttribute('download', '<%= (card.handle || "contact").replace(/[^a-zA-Z0-9]/g, "_") %>.vcf');
-          document.body.appendChild(tempAnchor);
-          tempAnchor.click();
-          document.body.removeChild(tempAnchor);
-          
-          setTimeout(() => URL.revokeObjectURL(url), 1000);
-          showToast('Opening contact prompt...');
-        });
-      }
-
-      // Check query params for notification flags
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('saved') === 'true') {
-        showToast('Card Saved Successfully');
-        const walletBtnText = document.getElementById('walletBtnText');
-        if (walletBtnText) {
-          walletBtnText.textContent = 'Already Saved';
-        }
-      }
-
-      const walletBtn = document.getElementById('btnSaveWallet');
-      if (walletBtn) {
-        addMobileListener(walletBtn, async (e) => {
-          try {
-            const res = await fetch('/wallet/save/<%= card._id %>', { 
-              method: 'POST',
-              headers: { 
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
-              }
-            });
-
-            if (res.status === 401 || res.redirected) {
-              const currentPath = window.location.pathname;
-              window.location.href = `/auth/login?redirect=${encodeURIComponent(currentPath)}`;
-              return;
-            }
-
-            const contentType = res.headers.get('content-type');
-            if (!contentType || !contentType.includes('application/json')) {
-              const currentPath = window.location.pathname;
-              window.location.href = `/login?redirect=${encodeURIComponent(currentPath)}`;
-              return;
-            }
-
-            const data = await res.json();
-
-            if (res.ok && data.success) {
-              const walletBtnText = document.getElementById('walletBtnText');
-              if (walletBtnText) walletBtnText.textContent = 'Already Saved';
-              showToast(data.message || 'Card Saved Successfully');
-            } else {
-              showToast(data.message || 'Failed to save card. Please try again.');
-            }
-          } catch (err) {
-            console.error('Save Card Error:', err);
-            const walletBtnText = document.getElementById('walletBtnText');
-            if (walletBtnText) walletBtnText.textContent = 'Already Saved';
-            showToast('Card Saved Successfully');
-          }
-        });
-      }
-
-      // Click Analytics Tracking Dispatcher
-      document.querySelectorAll('[data-linktype]').forEach((element) => {
-        addMobileListener(element, () => {
-          const linkType = element.getAttribute('data-linktype');
-          if (!linkType) return;
-
+        const payload = JSON.stringify({ linkType });
+        if (navigator.sendBeacon) {
+          const blob = new Blob([payload], { type: 'application/json' });
+          navigator.sendBeacon('/analytics/click/<%= card._id %>', blob);
+        } else {
           fetch('/analytics/click/<%= card._id %>', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ linkType })
+            body: payload,
+            keepalive: true
           }).catch((err) => console.error('Click Track Error:', err));
-        });
-      });
-
-      // Gallery Lightbox Modal display
-      window.openLightbox = function(url) {
-        const img = document.getElementById('lightboxImg');
-        if (img) img.src = url;
-        const modalElement = document.getElementById('lightboxModal');
-        if (modalElement && window.bootstrap) {
-          const lightboxModal = new bootstrap.Modal(modalElement);
-          lightboxModal.show();
         }
-      };
+      });
     });
-  </script>
+
+    // Gallery Lightbox Modal display
+    window.openLightbox = function(url) {
+      const img = document.getElementById('lightboxImg');
+      if (img) img.src = url;
+      const modalElement = document.getElementById('lightboxModal');
+      if (modalElement && window.bootstrap) {
+        const lightboxModal = new bootstrap.Modal(modalElement);
+        lightboxModal.show();
+      }
+    };
+  });
+</script>
 </body>
 </html>
