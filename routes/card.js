@@ -182,88 +182,21 @@ router.post('/card/edit/:id', ensureAuth, upload.single('profilePhoto'), async (
   }
 });
 
-// Inside GET /c/:handle handler:
 router.get('/c/:handle', async (req, res) => {
-  // Debug check
-const card = await Card.findOne({ handle });
-
-if (!card) {
-  console.log(`No card found with handle: ${handle}`);
-  return res.status(404).render('404', { title: 'Card Not Found' });
-}
-
-console.log('Card status:', card.status, 'isPublic:', card.isPublic);
-
-if (card.status !== 'active' || card.isPublic === false) {
-  return res.status(404).render('404', { title: 'Card Inactive or Private' });
-}
-
-    // Build SEO Meta Fields dynamically
-    const fullName = card.fullName || card.name || '';
-    const title = card.title || card.designation || '';
-    const company = card.company || card.organization || '';
-    const about = card.about || card.bio || '';
-
-    // Preferred title logic
-    let seoTitle = `${fullName} | NEXO Digital Card`;
-    if (fullName && title && company) {
-      seoTitle = `${fullName} | ${title} | ${company} | NEXO`;
-    } else if (fullName && company) {
-      seoTitle = `${fullName} | ${company} | NEXO`;
-    } else if (fullName && title) {
-      seoTitle = `${fullName} | ${title} | NEXO`;
-    }
-
-    // Preferred description logic (concise < 160 chars)
-    let seoDescription = about.trim().replace(/\s+/g, ' ');
-    if (!seoDescription) {
-      seoDescription = `Connect with ${fullName}${title ? `, ${title}` : ''}${company ? ` at ${company}` : ''}. View digital business card, contact details, and links on NEXO.`;
-    }
-    if (seoDescription.length > 155) {
-      seoDescription = seoDescription.substring(0, 152) + '...';
-    }
-
-    // Profile Image absolute URL converter
-    let seoImage = 'https://nexocard.in/images/og-default.jpg';
-    if (card.profileImage) {
-      if (card.profileImage.startsWith('http://') || card.profileImage.startsWith('https://')) {
-        seoImage = card.profileImage;
-      } else {
-        const cleanPath = card.profileImage.startsWith('/') ? card.profileImage : `/${card.profileImage}`;
-        seoImage = `https://nexocard.in${cleanPath}`;
-      }
-    }
-
-    const canonicalUrl = `https://nexocard.in/c/${handle}`;
-
-    res.render('public', {
-      card,
-      seo: {
-        title: seoTitle,
-        description: seoDescription,
-        canonicalUrl,
-        image: seoImage
-      }
-    });
-  } catch (error) {
-    console.error('Public card error:', error);
-    res.status(500).render('error', { message: 'Server error' });
-  }
-});
-
-router.get('/api/check-slug/:slug', async (req, res) => {
   try {
-    const { slug } = req.params;
-    const { cardId } = req.query;
-    const formattedSlug = slug.trim().toLowerCase();
-    const query = { handle: formattedSlug };
+    const card = await Card.findOne({ handle: req.params.handle.toLowerCase() });
+    if (!card) {
+      return res.status(404).render('404', { message: 'Nexo Profile Card not found.' });
+    }
 
-    if (cardId) query._id = { $ne: cardId };
+    let isSavedInWallet = false;
+    if (req.isAuthenticated() && req.user.wallet) {
+      isSavedInWallet = req.user.wallet.some((id) => id.toString() === card._id.toString());
+    }
 
-    const existingCard = await Card.findOne(query);
-    return res.json({ available: !existingCard, handle: formattedSlug });
+    res.render('card/public', { card, isSavedInWallet });
   } catch (error) {
-    return res.status(500).json({ available: false, error: 'Server error' });
+    res.status(500).render('404', { message: 'Error loading profile card.' });
   }
 });
 
