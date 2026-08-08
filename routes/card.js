@@ -184,18 +184,70 @@ router.post('/card/edit/:id', ensureAuth, upload.single('profilePhoto'), async (
 
 router.get('/c/:handle', async (req, res) => {
   try {
-    const card = await Card.findOne({ handle: req.params.handle.toLowerCase() });
+    // 1. Keep your exact working database lookup with lowercase handle
+    const handle = req.params.handle ? req.params.handle.toLowerCase() : '';
+    const card = await Card.findOne({ handle });
+
     if (!card) {
       return res.status(404).render('404', { message: 'Nexo Profile Card not found.' });
     }
 
+    // 2. Wallet check (unmodified)
     let isSavedInWallet = false;
-    if (req.isAuthenticated() && req.user.wallet) {
+    if (req.isAuthenticated() && req.user && req.user.wallet) {
       isSavedInWallet = req.user.wallet.some((id) => id.toString() === card._id.toString());
     }
 
-    res.render('card/public', { card, isSavedInWallet });
+    // 3. Build SEO metadata dynamically with fallback values
+    const fullName = card.fullName || card.name || 'User';
+    const title = card.title || card.designation || '';
+    const company = card.company || card.organization || '';
+    const about = card.about || card.bio || '';
+
+    // Title construction
+    let seoTitle = `${fullName} | NEXO Digital Card`;
+    if (fullName && title && company) {
+      seoTitle = `${fullName} | ${title} at ${company} | NEXO`;
+    } else if (fullName && title) {
+      seoTitle = `${fullName} | ${title} | NEXO`;
+    }
+
+    // Description construction
+    let seoDescription = about.trim().replace(/\s+/g, ' ');
+    if (!seoDescription) {
+      seoDescription = `Connect with ${fullName}${title ? `, ${title}` : ''}${company ? ` at ${company}` : ''}. View contact details, social links, and digital card on NEXO.`;
+    }
+    if (seoDescription.length > 155) {
+      seoDescription = seoDescription.substring(0, 152) + '...';
+    }
+
+    // Profile Image absolute URL fallback
+    let seoImage = 'https://nexocard.in/images/og-default.jpg';
+    if (card.profileImage) {
+      if (card.profileImage.startsWith('http://') || card.profileImage.startsWith('https://')) {
+        seoImage = card.profileImage;
+      } else {
+        const cleanPath = card.profileImage.startsWith('/') ? card.profileImage : `/${card.profileImage}`;
+        seoImage = `https://nexocard.in${cleanPath}`;
+      }
+    }
+
+    const canonicalUrl = `https://nexocard.in/c/${card.handle}`;
+
+    // 4. Render 'card/public' with both your original variables and the new SEO object
+    res.render('card/public', {
+      card,
+      isSavedInWallet,
+      seo: {
+        title: seoTitle,
+        description: seoDescription,
+        canonicalUrl,
+        image: seoImage
+      }
+    });
+
   } catch (error) {
+    console.error('Error loading profile card:', error);
     res.status(500).render('404', { message: 'Error loading profile card.' });
   }
 });
