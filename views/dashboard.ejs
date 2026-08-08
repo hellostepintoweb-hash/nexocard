@@ -1108,7 +1108,11 @@
 
     const bgImageObj = await fetchAndConvertToBase64('/background.png');
 
-    const hostOrigin = window.location.origin;
+    // Ensure production domain or fallback origin is used
+    const hostOrigin = (typeof process !== 'undefined' && process.env && process.env.BASE_URL)
+      ? process.env.BASE_URL
+      : window.location.origin;
+
     const cardSlug = card.handle || card.slug || '';
     const liveCardUrl = `${hostOrigin}/c/${cardSlug}`;
     const vcardUrl = `${hostOrigin}/c/${cardSlug}/vcard`;
