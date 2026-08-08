@@ -1,16 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title><%= card.metaTitle || (card.fullName || card.name) + ' | NEXO Card' %></title>
-  <meta name="description" content="<%= card.metaDescription || card.about || card.summary || 'View professional profile.' %>">
-  <meta property="og:title" content="<%= card.metaTitle || card.fullName || card.name %>">
-  <meta property="og:description" content="<%= card.metaDescription || card.about || card.summary %>">
-  <meta property="og:type" content="profile">
-  <meta property="og:image" content="<%= card.profilePhoto || '' %>">
-  <meta name="twitter:card" content="summary_large_image">
+  <!-- Dynamic SEO Meta Tags -->
+  <title><%= (typeof seo !== 'undefined' && seo.title) ? seo.title : (card.fullName + ' | NEXO Digital Card') %></title>
+  <meta name="description" content="<%= (typeof seo !== 'undefined' && seo.description) ? seo.description : 'Digital business card powered by NEXO.' %>" />
+  <link rel="canonical" href="<%= (typeof seo !== 'undefined' && seo.canonicalUrl) ? seo.canonicalUrl : ('https://nexocard.in/c/' + card.handle) %>" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="profile" />
+  <meta property="og:title" content="<%= (typeof seo !== 'undefined' && seo.title) ? seo.title : card.fullName %>" />
+  <meta property="og:description" content="<%= (typeof seo !== 'undefined' && seo.description) ? seo.description : '' %>" />
+  <meta property="og:url" content="<%= (typeof seo !== 'undefined' && seo.canonicalUrl) ? seo.canonicalUrl : ('https://nexocard.in/c/' + card.handle) %>" />
+  <% if (typeof seo !== 'undefined' && seo.image) { %>
+    <meta property="og:image" content="<%= seo.image %>" />
+  <% } %>
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="<%= (typeof seo !== 'undefined' && seo.title) ? seo.title : card.fullName %>" />
+  <meta name="twitter:description" content="<%= (typeof seo !== 'undefined' && seo.description) ? seo.description : '' %>" />
+  <% if (typeof seo !== 'undefined' && seo.image) { %>
+    <meta name="twitter:image" content="<%= seo.image %>" />
+  <% } %>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
