@@ -839,7 +839,7 @@
 
       <!-- Action Buttons -->
       <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
-        <button id="pwa-install-btn" style="display: none;" class="btn-pwa-install">
+        <button id="pwa-install-btn" class="btn-pwa-install">
           📲 Install App
         </button>
 
@@ -1088,22 +1088,63 @@
   
   setTimeout(dismissPreloader, 1000);
 
-  // PWA Service Worker & Install Logic
+  // Register Service Worker
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(() => console.log('SW Registered'))
+        .catch(err => console.log('SW Fail:', err));
+    });
+  }
+
+  // PWA Install Prompt Handler
   let deferredPrompt;
+  const installBtn = document.getElementById('pwa-install-btn');
+
+  // Detect standalone mode (App is already installed/running as standalone)
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+  if (isStandalone) {
+    if (installBtn) installBtn.style.display = 'none';
+  }
+
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    
-    // Toggle single install app button
-    const installBtn = document.getElementById('pwa-install-btn');
-    if (installBtn) installBtn.style.display = 'inline-flex';
+    if (installBtn && !isStandalone) {
+      installBtn.style.display = 'inline-flex';
+    }
   });
 
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW fail:', err));
+  if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+      // 1. If native beforeinstallprompt captured
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          installBtn.style.display = 'none';
+        }
+        deferredPrompt = null;
+        return;
+      }
+
+      // 2. iOS Safari Fallback
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      if (isIOS) {
+        alert('To install NEXO on iOS: tap the Share button in Safari, then select "Add to Home Screen".');
+        return;
+      }
+
+      // 3. Fallback when browser prompt was already dismissed or unavailable
+      alert('To install NEXO as an App, tap your browser menu (⋮ or share icon) and select "Install app" or "Add to Home screen".');
     });
   }
+
+  window.addEventListener('appinstalled', () => {
+    if (installBtn) installBtn.style.display = 'none';
+    deferredPrompt = null;
+  });
 
   // Interactive Dynamic Preview Cards
   const profiles = [
