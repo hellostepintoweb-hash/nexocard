@@ -388,23 +388,11 @@
                   
                   <!-- Profile Info -->
                   <div class="col-lg-4 col-md-12 d-flex align-items-center gap-3">
-                    <!-- AFTER -->
-<% 
-  const walletPhoto = savedCard.profilePhoto || savedCard.avatarUrl || savedCard.photo || (savedCard.cardId && (savedCard.cardId.profilePhoto || savedCard.cardId.avatarUrl));
-  const walletName = savedCard.fullName || savedCard.name || (savedCard.cardId && savedCard.cardId.fullName) || 'Digital Profile';
-%>
-<% if (walletPhoto && walletPhoto.trim() !== '') { %>
-  <img src="<%= walletPhoto %>" 
-       alt="<%= walletName %>" 
-       class="rounded-circle object-fit-cover border shadow-sm flex-shrink-0" 
-       style="width: 46px; height: 46px; object-position: top center;"
-       onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
-  <div class="avatar-circle" style="width: 46px; height: 46px; font-size: 0.95rem; display: none;">
-    <%= walletName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0,2) %>
-  </div>
+                    <% if (savedCard.avatarUrl || savedCard.profilePhoto) { %>
+  <img src="<%= savedCard.avatarUrl || savedCard.profilePhoto %>" alt="<%= savedCard.fullName %>" class="rounded-circle object-fit-cover border shadow-sm flex-shrink-0" style="width: 46px; height: 46px; object-position: top center;">
 <% } else { %>
   <div class="avatar-circle" style="width: 46px; height: 46px; font-size: 0.95rem;">
-    <%= walletName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0,2) %>
+    <%= (savedCard.fullName || 'NX').split(' ').map(n => n[0]).join('').toUpperCase().substring(0,2) %>
   </div>
 <% } %>
                     <div class="text-truncate flex-grow-1">
