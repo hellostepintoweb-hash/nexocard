@@ -56,8 +56,6 @@ router.get('/sitemap.xml', async (req, res) => {
 
     // 2. Fetch active and public cards with valid handle
     const publicCards = await Card.find({
-      isPublic: true,
-      status: 'active',
       handle: { $exists: true, $ne: '' }
     }).select('handle updatedAt').lean();
 
