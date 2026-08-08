@@ -263,4 +263,98 @@ router.delete('/card/delete/:id', ensureAuth, async (req, res) => {
 });
 
 
+// Add helper to escape vCard string fields according to vCard standard
+const escapeVCardField = (str) => {
+  if (!str) return '';
+  return String(str)
+    .replace(/\\/g, '\\\\')
+    .replace(/;/g, '\\;')
+    .replace(/,/g, '\\,')
+    .replace(/\n/g, '\\n');
+};
+
+// GET /c/:handle/vcard - Dynamic vCard download route
+router.get('/c/:handle/vcard', async (req, res) => {
+  try {
+    const rawHandle = req.params.handle || '';
+    const cleanHandle = rawHandle.trim().toLowerCase();
+
+    // Query card using schema handle property
+    const card = await Card.findOne({ handle: cleanHandle });
+
+    // Handle non-existent cards using existing NEXO 404 response
+    if (!card) {
+      return res.status(404).render('404', { message: 'Nexo Profile Card not found.' });
+    }
+
+    const hostUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
+    const cardSlug = card.handle;
+    const displayName = card.fullName || 'Contact';
+
+    // Build vCard 3.0 fields safely
+    let vCardLines = [
+      'BEGIN:VCARD',
+      'VERSION:3.0',
+      `FN:${escapeVCardField(displayName)}`,
+      `N:${escapeVCardField(displayName.split(' ').reverse().join(';'))};;;`
+    ];
+
+    if (card.company) {
+      vCardLines.push(`ORG:${escapeVCardField(card.company)}`);
+    }
+
+    if (card.title) {
+      vCardLines.push(`TITLE:${escapeVCardField(card.title)}`);
+    }
+
+    if (card.phone) {
+      const cleanPhone = card.phone.replace(/[^0-9+]/g, '');
+      if (cleanPhone) {
+        vCardLines.push(`TEL;TYPE=CELL:${cleanPhone}`);
+      }
+    }
+
+    if (card.email) {
+      vCardLines.push(`EMAIL;TYPE=INTERNET:${escapeVCardField(card.email)}`);
+    }
+
+    if (card.website) {
+      const formattedUrl = card.website.startsWith('http') ? card.website : `https://${card.website}`;
+      vCardLines.push(`URL:${escapeVCardField(formattedUrl)}`);
+    } else {
+      vCardLines.push(`URL:${escapeVCardField(`${hostUrl}/c/${cardSlug}`)}`);
+    }
+
+    if (card.address) {
+      vCardLines.push(`ADR;TYPE=WORK:;;${escapeVCardField(card.address)};;;;`);
+    }
+
+    if (card.profilePhoto || card.avatarUrl) {
+      const photoUrl = card.profilePhoto || card.avatarUrl;
+      if (photoUrl && photoUrl.startsWith('http')) {
+        vCardLines.push(`PHOTO;VALUE=URL:${photoUrl}`);
+      }
+    }
+
+    vCardLines.push('END:VCARD');
+
+    const vCardContent = vCardLines.join('\r\n');
+
+    // Sanitize filename for header
+    const safeFilename = cardSlug.replace(/[^a-zA-Z0-9_-]/g, '_');
+
+    // Set correct headers for instant download
+    res.setHeader('Content-Type', 'text/vcard; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="${safeFilename}.vcf"`);
+
+    return res.status(200).send(vCardContent);
+
+  } catch (error) {
+    console.error('vCard Generation Error:', error);
+    return res.status(500).render('404', { message: 'Error generating contact file.' });
+  }
+});
+
+
+
 module.exports = router;
