@@ -6,6 +6,7 @@ const MongoStore = require('connect-mongo');
 const passport = require('passport');
 const connectDB = require('./config/db');
 const Settings = require('./models/Settings');
+const seoRoutes = require('./routes/seo');
 
 dotenv.config();
 connectDB();
@@ -67,8 +68,11 @@ app.get('/', async (req, res) => {
   });
 });
 
+app.use('/', seoRoutes);
 // Authentication Routes
 app.use('/auth', require('./routes/auth'));
+
+
 
 // Administrative Routes (MUST be mounted before generic card routes)
 app.use('/', require('./routes/admin'));
