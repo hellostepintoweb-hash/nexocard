@@ -878,7 +878,7 @@
           const doc = await buildPDFDocument(activeShareCardData);
           const slug = activeShareCardData.handle || activeShareCardData.slug || 'nexo';
           const pdfBlob = doc.output('blob');
-          const pdfFile = new File([pdfBlob], `${slug}-pro-card.pdf`, { type: 'application/pdf' });
+          const pdfFile = new File([pdfBlob], `${slug}_nexocard.pdf`, { type: 'application/pdf' });
 
           if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
             await navigator.share({
@@ -887,7 +887,7 @@
               text: `Here is the digital business card PDF:`
             });
           } else {
-            doc.save(`${slug}-pro-card.pdf`);
+            doc.save(`${slug}_nexocard.pdf`);
             showNotificationAlert('PDF generated with active links!', 'success');
           }
         } catch (err) {
