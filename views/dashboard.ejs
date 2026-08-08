@@ -1573,7 +1573,7 @@
       showNotificationAlert('Preparing high-res profile card...', 'info');
       const doc = await buildPDFDocument(card);
       const slug = card.handle || card.slug || 'nexo';
-      doc.save(`${slug}-pro-card.pdf`);
+      doc.save(`${slug}_nexocard.pdf`);
       showNotificationAlert('PDF generated with active links!', 'success');
     } catch (err) {
       console.error('PDF Generation Error:', err);
