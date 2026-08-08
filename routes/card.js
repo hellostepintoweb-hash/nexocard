@@ -184,12 +184,19 @@ router.post('/card/edit/:id', ensureAuth, upload.single('profilePhoto'), async (
 
 // Inside GET /c/:handle handler:
 router.get('/c/:handle', async (req, res) => {
-  try {
-    const card = await Card.findOne({ handle: req.params.handle.toLowerCase() });
+  // Debug check
+const card = await Card.findOne({ handle });
 
-    if (!card) {
-      return res.status(404).render('404', { title: 'Card Not Found' });
-    }
+if (!card) {
+  console.log(`No card found with handle: ${handle}`);
+  return res.status(404).render('404', { title: 'Card Not Found' });
+}
+
+console.log('Card status:', card.status, 'isPublic:', card.isPublic);
+
+if (card.status !== 'active' || card.isPublic === false) {
+  return res.status(404).render('404', { title: 'Card Inactive or Private' });
+}
 
     // Build SEO Meta Fields dynamically
     const fullName = card.fullName || card.name || '';
