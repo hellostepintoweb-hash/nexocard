@@ -185,8 +185,7 @@ router.post('/card/edit/:id', ensureAuth, upload.single('profilePhoto'), async (
 // Inside GET /c/:handle handler:
 router.get('/c/:handle', async (req, res) => {
   try {
-    const handle = req.params.handle;
-    const card = await Card.findOne({ handle, status: 'active', isPublic: true });
+    const card = await Card.findOne({ handle: req.params.handle.toLowerCase() });
 
     if (!card) {
       return res.status(404).render('404', { title: 'Card Not Found' });
