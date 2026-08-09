@@ -14,6 +14,9 @@
   <meta name="twitter:title" content="NEXO — Digital Business Cards for Professionals" />
   <meta name="twitter:description" content="Create and share your professional digital business card with NEXO. Share contact details, WhatsApp, social profiles, website, QR code and more." />
 
+  <!-- Mobile Viewport Setup -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
   <!-- PWA Manifest & Icons -->
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#000000">
@@ -27,7 +30,7 @@
   
   <style>
     /* ==========================================================================
-       1. CORE DESIGN SYSTEM & MOBILE FIXES
+       1. CORE DESIGN SYSTEM & MOBILE SAFEGUARDS
        ========================================================================== */
     :root {
       --brand-primary: #556B2F;
@@ -40,7 +43,7 @@
       --card-border: rgba(226, 232, 240, 0.8);
       --font-main: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
       --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-      --shadow-phone: 0 25px 50px -12px rgba(15, 23, 42, 0.25), 0 0 30px rgba(85, 107, 47, 0.15);
+      --shadow-phone: 0 20px 45px -10px rgba(15, 23, 42, 0.22), 0 0 25px rgba(85, 107, 47, 0.12);
       --shadow-premium: 0 20px 30px -10px rgba(0, 0, 0, 0.05), 0 10px 15px -5px rgba(0, 0, 0, 0.02);
     }
 
@@ -53,6 +56,8 @@
 
     html {
       scroll-behavior: smooth;
+      text-size-adjust: 100%;
+      -webkit-text-size-adjust: 100%;
     }
 
     html, body {
@@ -91,9 +96,9 @@
     }
 
     .btn-auth-secondary, .btn-auth-primary, .btn-pwa-install {
-      padding: 6px 14px;
+      padding: 6px 12px;
       border-radius: 100px;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       text-decoration: none;
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -101,7 +106,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 34px;
+      min-height: 36px;
     }
 
     @media (min-width: 640px) {
@@ -192,7 +197,7 @@
       color: #FFFFFF;
       font-weight: 700;
       font-size: 15px;
-      min-height: 48px;
+      min-height: 50px;
       padding: 12px 28px;
       border-radius: 100px;
       border: none;
@@ -217,7 +222,7 @@
       color: var(--brand-dark);
       font-weight: 700;
       font-size: 15px;
-      min-height: 48px;
+      min-height: 50px;
       padding: 12px 28px;
       border-radius: 100px;
       border: 1px solid #E2E8F0;
@@ -244,9 +249,9 @@
     .hero-container {
       position: relative;
       z-index: 1;
-      padding: 32px 20px 40px 20px;
-      width: 100vw;
-      max-width: 100%;
+      padding: 24px 16px 40px 16px;
+      width: 100%;
+      max-width: 100vw;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
@@ -286,12 +291,12 @@
       font-size: 12px;
       font-weight: 700;
       color: var(--brand-primary);
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .hero-title {
-      font-size: clamp(28px, 5.5vw, 48px);
-      line-height: 1.15;
+      font-size: clamp(26px, 6vw, 48px);
+      line-height: 1.18;
       font-weight: 800;
       letter-spacing: -0.03em;
       color: var(--brand-dark);
@@ -299,10 +304,10 @@
     }
 
     .hero-subtitle {
-      font-size: clamp(14px, 2.2vw, 17px);
+      font-size: clamp(14px, 3vw, 17px);
       color: var(--text-muted);
       line-height: 1.6;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
       font-weight: 500;
       max-width: 580px;
     }
@@ -312,7 +317,7 @@
       flex-direction: column;
       gap: 12px;
       width: 100%;
-      margin-bottom: 32px;
+      margin-bottom: 28px;
     }
 
     @media (min-width: 600px) {
@@ -323,7 +328,7 @@
     }
 
     .category-section {
-      margin-top: 16px;
+      margin-top: 12px;
       width: 100%;
     }
 
@@ -338,18 +343,19 @@
 
     .chips-wrapper {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       overflow-x: auto;
       padding: 4px 2px 12px 2px;
       width: 100%;
       scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
     }
     .chips-wrapper::-webkit-scrollbar { display: none; }
 
     .chip {
       background: #FFFFFF;
       border: 1px solid var(--card-border);
-      padding: 8px 18px;
+      padding: 8px 16px;
       border-radius: 100px;
       font-size: 13px;
       font-weight: 600;
@@ -359,6 +365,9 @@
       user-select: none;
       flex-shrink: 0;
       transition: all 0.25s ease;
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
     }
 
     .chip.active {
@@ -368,7 +377,7 @@
     }
 
     /* ==========================================================================
-       4. SMARTPHONE MOCKUP
+       4. SMARTPHONE MOCKUP (MOBILE OPTIMIZED)
        ========================================================================== */
     .hero-right-preview {
       position: relative;
@@ -376,6 +385,7 @@
       flex-direction: column;
       align-items: center;
       width: 100%;
+      max-width: 100%;
     }
 
     .phone-mockup-wrapper {
@@ -386,25 +396,36 @@
 
     .phone-mockup {
       width: 100%;
-      max-width: 330px;
-      height: 620px;
+      max-width: 320px;
+      height: 580px;
+      max-height: 80dvh;
       background: #000000;
-      border-radius: 40px;
-      padding: 8px;
+      border-radius: 36px;
+      padding: 7px;
       box-shadow: var(--shadow-phone);
       position: relative;
       margin: 0 auto;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    @media (min-width: 400px) {
+      .phone-mockup {
+        max-width: 330px;
+        height: 610px;
+        border-radius: 40px;
+        padding: 8px;
+      }
     }
 
     .phone-screen {
       width: 100%;
       height: 100%;
       background: #FFFFFF;
-      border-radius: 32px;
+      border-radius: 30px;
       overflow-y: auto;
       position: relative;
       scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
     }
     .phone-screen::-webkit-scrollbar { display: none; }
 
@@ -423,14 +444,14 @@
     .card-svg-header {
       position: relative;
       width: 100%;
-      height: 110px;
+      height: 100px;
       overflow: hidden;
     }
 
     .mode-pill {
       position: absolute;
-      top: 12px;
-      right: 14px;
+      top: 10px;
+      right: 12px;
       background: rgba(255, 255, 255, 0.3);
       backdrop-filter: blur(8px);
       border-radius: 100px;
@@ -443,7 +464,7 @@
 
     .card-profile-block {
       text-align: center;
-      margin-top: -38px;
+      margin-top: -36px;
       position: relative;
       z-index: 5;
       padding: 0 10px;
@@ -451,8 +472,8 @@
 
     .avatar-wrapper {
       position: relative;
-      width: 82px;
-      height: 82px;
+      width: 78px;
+      height: 78px;
       margin: 0 auto 8px auto;
     }
 
@@ -481,7 +502,7 @@
     }
 
     .user-name {
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 800;
       color: #0F172A;
     }
@@ -498,11 +519,11 @@
       font-size: 10px;
       color: #64748B;
       font-weight: 600;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .action-grid-wrap {
-      padding: 0 12px;
+      padding: 0 10px;
       margin-bottom: 12px;
     }
 
@@ -517,14 +538,14 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 6px;
-      width: 50%;
+      width: 60%;
       margin: 0 auto;
     }
 
     .action-btn {
       background: rgba(255, 255, 255, 0.85);
-      border-radius: 14px;
-      padding: 10px 4px;
+      border-radius: 12px;
+      padding: 8px 4px;
       text-align: center;
       border: 1px solid rgba(255, 255, 255, 0.9);
       display: flex;
@@ -535,8 +556,8 @@
     }
 
     .action-btn-icon {
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
       color: var(--brand-primary);
     }
 
@@ -547,11 +568,11 @@
     }
 
     .about-pill {
-      margin: 0 12px 14px 12px;
+      margin: 0 10px 12px 10px;
       background: rgba(255, 255, 255, 0.7);
       border: 1px solid rgba(255, 255, 255, 0.8);
       border-radius: 12px;
-      padding: 10px 14px;
+      padding: 10px 12px;
       font-size: 9px;
       color: #334155;
       text-align: center;
@@ -559,19 +580,19 @@
     }
 
     .cta-stack {
-      padding: 0 12px;
+      padding: 0 10px;
       display: flex;
       flex-direction: column;
       gap: 8px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .btn-nexo-wallet {
       width: 100%;
       background: #0B132B;
       color: #FFFFFF;
-      padding: 10px;
-      border-radius: 16px;
+      padding: 9px;
+      border-radius: 14px;
       font-size: 10px;
       font-weight: 700;
       display: flex;
@@ -584,8 +605,8 @@
       width: 100%;
       background: var(--brand-primary);
       color: #FFFFFF;
-      padding: 10px;
-      border-radius: 16px;
+      padding: 9px;
+      border-radius: 14px;
       font-size: 10px;
       font-weight: 700;
       display: flex;
@@ -595,11 +616,11 @@
     }
 
     .location-box {
-      margin: 0 12px;
+      margin: 0 10px;
       background: rgba(255, 255, 255, 0.7);
-      border-radius: 14px;
+      border-radius: 12px;
       border: 1px solid rgba(255, 255, 255, 0.8);
-      padding: 12px;
+      padding: 10px;
     }
 
     .location-header {
@@ -615,7 +636,7 @@
     .location-address {
       font-size: 8px;
       color: #64748B;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       font-weight: 500;
     }
 
@@ -623,7 +644,7 @@
       width: 100%;
       background: #FFFFFF;
       border: 1px solid #E2E8F0;
-      padding: 7px;
+      padding: 6px;
       border-radius: 100px;
       font-size: 9px;
       font-weight: 700;
@@ -636,7 +657,7 @@
 
     .card-footer {
       text-align: center;
-      margin-top: 14px;
+      margin-top: 12px;
       font-size: 8px;
       color: #64748B;
     }
@@ -660,15 +681,16 @@
 
     .color-dots {
       display: flex;
-      gap: 6px;
+      gap: 8px;
     }
 
     .color-dot {
-      width: 18px;
-      height: 18px;
+      width: 22px;
+      height: 22px;
       border-radius: 50%;
       cursor: pointer;
       border: 2px solid #FFFFFF;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
     .color-dot.active {
@@ -679,7 +701,7 @@
        6. FEATURES SECTION
        ========================================================================== */
     .features-section {
-      padding: 80px 20px;
+      padding: 56px 16px;
       background: #FAFAFC;
       border-top: 1px solid var(--card-border);
       border-bottom: 1px solid var(--card-border);
@@ -693,11 +715,11 @@
     .features-header {
       text-align: center;
       max-width: 640px;
-      margin: 0 auto 56px auto;
+      margin: 0 auto 40px auto;
     }
 
     .features-header-tag {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 1.2px;
@@ -706,59 +728,59 @@
     }
 
     .features-header-title {
-      font-size: clamp(26px, 4vw, 36px);
+      font-size: clamp(22px, 4vw, 36px);
       font-weight: 800;
       color: var(--brand-dark);
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .features-header-subtitle {
-      font-size: 16px;
+      font-size: 14px;
       color: var(--text-muted);
     }
 
     .features-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 24px;
+      gap: 16px;
     }
 
     @media (min-width: 640px) {
-      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
     }
 
     @media (min-width: 1024px) {
-      .features-grid { grid-template-columns: repeat(3, 1fr); }
+      .features-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; }
     }
 
     .feature-card {
       background: #FFFFFF;
       border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 28px 24px;
+      border-radius: 18px;
+      padding: 22px 20px;
     }
 
     .feature-icon-box {
-      width: 48px;
-      height: 48px;
-      border-radius: 14px;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
       background: rgba(85, 107, 47, 0.08);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
-      margin-bottom: 20px;
+      font-size: 20px;
+      margin-bottom: 16px;
     }
 
     .feature-title {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 700;
       color: var(--brand-dark);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .feature-desc {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--text-muted);
     }
 
@@ -767,7 +789,7 @@
        ========================================================================== */
     .social-proof-section {
       background: #FFFFFF;
-      padding: 70px 20px;
+      padding: 56px 16px;
     }
 
     .proof-container {
@@ -777,43 +799,43 @@
     }
 
     .proof-title {
-      font-size: 12px;
+      font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 1.2px;
       font-weight: 800;
       color: var(--brand-primary);
-      margin-bottom: 32px;
+      margin-bottom: 24px;
     }
 
     .stats-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 20px;
+      gap: 14px;
     }
 
     @media (min-width: 600px) {
       .stats-grid {
         grid-template-columns: repeat(3, 1fr);
-        gap: 24px;
+        gap: 20px;
       }
     }
 
     .stat-card {
-      padding: 28px 20px;
-      border-radius: 20px;
+      padding: 22px 16px;
+      border-radius: 18px;
       background: var(--bg-light);
       border: 1px solid var(--card-border);
     }
 
     .stat-number {
-      font-size: clamp(32px, 5vw, 42px);
+      font-size: clamp(28px, 5vw, 42px);
       font-weight: 800;
       color: var(--brand-dark);
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     .stat-label {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--text-muted);
       font-weight: 600;
     }
@@ -830,12 +852,12 @@
   </div>
 
   <!-- HEADER NAVIGATION BAR -->
-  <header class="sticky top-0 z-50 py-2.5 bg-white/90 backdrop-blur-md border-b border-zinc-100 header-shadow">
-    <div class="max-w-7xl mx-auto w-full px-3 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-y-2 gap-x-2">
+  <header class="sticky top-0 z-50 py-2 bg-white/95 backdrop-blur-md border-b border-zinc-100 header-shadow">
+    <div class="max-w-7xl mx-auto w-full px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-x-2">
       
       <!-- Logo Section -->
       <a href="/" class="block shrink-0">
-        <img src="/flat_logo.png" alt="NEXO" class="w-[85px] sm:w-[150px] h-auto object-contain" onerror="this.src='https://via.placeholder.com/150x40?text=NEXO'">
+        <img src="/flat_logo.png" alt="NEXO" class="w-[85px] sm:w-[140px] h-auto object-contain" onerror="this.src='https://via.placeholder.com/150x40?text=NEXO'">
       </a>
 
       <!-- Subtitle (Tablet/Desktop) -->
@@ -847,7 +869,7 @@
       </div>
 
       <!-- Action Buttons -->
-      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+      <div class="flex items-center gap-1 sm:gap-2 shrink-0">
         <button id="pwa-install-btn" class="btn-pwa-install">
           📲 Install App
         </button>
