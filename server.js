@@ -7,6 +7,7 @@ const passport = require('passport');
 const connectDB = require('./config/db');
 const Settings = require('./models/Settings');
 const seoRoutes = require('./routes/seo');
+const landingRoutes = require('./routes/landing');
 
 dotenv.config();
 connectDB();
@@ -77,6 +78,7 @@ app.use('/auth', require('./routes/auth'));
 // Administrative Routes (MUST be mounted before generic card routes)
 app.use('/', require('./routes/admin'));
 app.use('/', require('./routes/settings'));
+app.use('/', landingRoutes);
 
 // Application & Operational Routes
 app.use('/', require('./routes/dashboard'));
