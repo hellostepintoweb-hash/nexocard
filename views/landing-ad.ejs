@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-white antialiased">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  
+  <title><%= (typeof seo !== 'undefined' && seo.title) ? seo.title : 'NEXO Digital Business Card — ₹299 Lifetime Access' %></title>
+  <meta name="description" content="<%= (typeof seo !== 'undefined' && seo.description) ? seo.description : 'Create your professional NEXO Digital Business Card for ₹299. Share contact details, QR code, and clickable PDF.' %>" />
+  <link rel="canonical" href="<%= (typeof seo !== 'undefined' && seo.canonicalUrl) ? seo.canonicalUrl : 'https://nexocard.in/offer' %>" />
+
+  <!-- Open Graph / Facebook / Instagram -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="NEXO Digital Business Card — ₹299 Lifetime Access" />
+  <meta property="og:description" content="Still carrying a paper visiting card? Go digital with NEXO for ₹299 (One-Time Payment • Lifetime Access)." />
+  <meta property="og:url" content="https://nexocard.in/offer" />
+
+  <!-- Fonts & Tailwind CSS CDN -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* --------------------------------------------------------------------------
+       MOBILE-FIRST CONVERSION ENGINE STYLES
+       -------------------------------------------------------------------------- */
+    :root {
+      --navy-main: #0A1128;
+      --navy-dark: #050814;
+      --nexo-purple: #4F46E5;
+      --nexo-accent: #06B6D4;
+      --price-green: #10B981;
+      --bg-light: #F8FAFC;
+      --font-poppins: 'Poppins', -apple-system, sans-serif;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      touch-action: manipulation;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      text-size-adjust: 100%;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    html, body {
+      width: 100%;
+      max-width: 100vw;
+      overflow-x: hidden !important;
+      position: relative;
+      font-family: var(--font-poppins);
+      background-color: #FFFFFF;
+      color: #0F172A;
+    }
+
+    /* Padding offset to prevent sticky CTA covering footer content */
+    body {
+      padding-bottom: 84px;
+    }
+
+    /* High-contrast dominant primary CTAs */
+    .btn-cta-primary {
+      background: linear-gradient(135deg, #4F46E5 0%, #06B6D4 100%);
+      color: #FFFFFF;
+      font-weight: 800;
+      font-size: 16px;
+      padding: 16px 24px;
+      border-radius: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      width: 100%;
+      text-align: center;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-cta-primary:active {
+      transform: scale(0.98);
+    }
+
+    .btn-sticky-bar {
+      background: linear-gradient(135deg, #4F46E5 0%, #06B6D4 100%);
+      color: #FFFFFF;
+      font-weight: 800;
+      font-size: 14px;
+      padding: 12px 18px;
+      border-radius: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-decoration: none;
+      box-shadow: 0 4px 15px rgba(79, 70, 229, 0.35);
+      width: 100%;
+    }
+
+    /* Phone Mockup Styling */
+    .mockup-container {
+      width: 100%;
+      max-width: 320px;
+      height: 570px;
+      background: #000000;
+      border-radius: 38px;
+      padding: 8px;
+      box-shadow: 0 25px 50px -12px rgba(10, 17, 40, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      margin: 0 auto;
+    }
+
+    .mockup-screen {
+      width: 100%;
+      height: 100%;
+      background: #F8FAF9;
+      border-radius: 30px;
+      overflow-y: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .mockup-screen::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* FAQ Accordion */
+    .faq-item {
+      border: 1px solid #E2E8F0;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #FFFFFF;
+      transition: border-color 0.2s ease;
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s cubic-bezier(0, 1, 0, 1), padding 0.3s ease;
+    }
+
+    .faq-item.open .faq-answer {
+      max-height: 300px;
+      padding-bottom: 16px;
+    }
+
+    .faq-item.open .faq-icon {
+      transform: rotate(180deg);
+    }
+  </style>
+</head>
+<body class="bg-white text-slate-900 antialiased">
+
+  <!-- =========================================================================
+       1. SIMPLE LANDING HEADER (NO DISTRACTIONS)
+       ========================================================================= -->
+  <header class="w-full py-3.5 px-4 bg-white border-b border-slate-100 sticky top-0 z-40">
+    <div class="max-w-5xl mx-auto flex items-center justify-between">
+      <a href="/offer" class="flex items-center gap-2 text-decoration-none">
+        <img src="/flat_logo.png" alt="NEXO" class="h-7 w-auto object-contain" onerror="this.src='https://via.placeholder.com/110x30?text=NEXO'">
+      </a>
+      <span class="text-[11px] font-semibold text-slate-500 tracking-wide uppercase">Your World. One Link.</span>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- =========================================================================
+         2. HERO SECTION (PROBLEM -> SOLUTION -> PRODUCT -> PRICE -> CTA)
+         ========================================================================= -->
+    <section class="px-4 pt-6 pb-10 bg-gradient-to-b from-slate-50 to-white">
+      <div class="max-w-5xl mx-auto flex flex-col md:grid md:grid-cols-2 md:gap-8 items-center">
+        
+        <!-- Hero Left Column -->
+        <div class="w-full text-left">
+          
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-[11px] font-bold mb-4">
+            ⚡ THE FUTURE OF PROFESSIONAL NETWORKING
+          </div>
+
+          <h1 class="text-[28px] sm:text-4xl md:text-5xl font-black text-slate-900 leading-[1.15] tracking-tight mb-3">
+            STILL CARRYING A PAPER <br class="hidden sm:inline"/>VISITING CARD?
+          </h1>
+
+          <p class="text-[18px] sm:text-2xl font-extrabold text-indigo-600 mb-3">
+            GO DIGITAL WITH NEXO.
+          </p>
+
+          <p class="text-sm sm:text-base text-slate-600 font-normal leading-relaxed mb-6">
+            Your professional identity, contacts, social links, location and more — all in one smart digital card.
+          </p>
+
+          <!-- Immediate Price & Offer Box -->
+          <div class="bg-slate-900 text-white p-4 rounded-2xl mb-6 shadow-xl border border-slate-800 flex items-center justify-between">
+            <div>
+              <div class="text-3xl font-black text-emerald-400">₹299</div>
+              <div class="text-[10px] uppercase font-bold tracking-wider text-slate-300">ONE-TIME PAYMENT • LIFETIME ACCESS</div>
+            </div>
+            <div class="text-right">
+              <span class="inline-block bg-emerald-500/20 text-emerald-300 text-[11px] font-bold px-2.5 py-1 rounded-full border border-emerald-500/30">
+                No Subscription
+              </span>
+            </div>
+          </div>
+
+          <!-- Hero Dominant CTA Button -->
+          <a href="/auth/register?ref=ig_ad&offer=299_lifetime" id="hero-cta" class="btn-cta-primary mb-4">
+            <span>CREATE MY NEXO CARD</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </a>
+
+          <!-- Key Value Checkmarks -->
+          <div class="grid grid-cols-2 gap-2 text-[12px] font-semibold text-slate-700 pt-1 mb-8 md:mb-0">
+            <div class="flex items-center gap-1.5"><span class="text-emerald-500 font-bold">✓</span> Digital Card</div>
+            <div class="flex items-center gap-1.5"><span class="text-emerald-500 font-bold">✓</span> QR Code</div>
+            <div class="flex items-center gap-1.5"><span class="text-emerald-500 font-bold">✓</span> Clickable PDF</div>
+            <div class="flex items-center gap-1.5"><span class="text-emerald-500 font-bold">✓</span> WhatsApp Sharing</div>
+          </div>
+
+        </div>
+
+        <!-- Hero Right Column (Smartphone Card Mockup) -->
+        <div class="w-full mt-2 md:mt-0 flex justify-center">
+          <div class="mockup-container">
+            <div class="mockup-screen">
+              
+              <!-- Card Visual Preview -->
+              <div class="w-full min-h-full bg-slate-50 relative pb-6">
+                <!-- Banner header -->
+                <div class="h-24 bg-gradient-to-r from-indigo-600 to-cyan-600 relative overflow-hidden">
+                  <div class="absolute top-2 right-3 bg-white/20 backdrop-blur-md px-2 py-0.5 rounded-full text-[8px] font-bold text-white">Mode 🌙</div>
+                </div>
+
+                <!-- Profile avatar -->
+                <div class="text-center -mt-10 px-3 relative z-10">
+                  <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200" class="w-20 h-20 rounded-full mx-auto border-4 border-white shadow-md object-cover" alt="Profile">
+                  <h3 class="text-base font-extrabold text-slate-900 mt-1">Yazhini</h3>
+                  <div class="text-[10px] font-extrabold text-indigo-600 tracking-wider uppercase">FOUNDER</div>
+                  <div class="text-[10px] font-medium text-slate-500 mb-3">Yazhini Printers</div>
+                </div>
+
+                <!-- Action Grid -->
+                <div class="px-3 mb-3">
+                  <div class="grid grid-cols-4 gap-1.5 text-center text-[8px] font-bold text-indigo-700">
+                    <div class="bg-white p-2 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center">📞 Call</div>
+                    <div class="bg-white p-2 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center">💬 WhatsApp</div>
+                    <div class="bg-white p-2 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center">✉️ Email</div>
+                    <div class="bg-white p-2 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center">🌐 Website</div>
+                  </div>
+                </div>
+
+                <!-- Contact CTAs -->
+                <div class="px-3 space-y-1.5 mb-3">
+                  <div class="w-full bg-slate-900 text-white text-[10px] font-bold py-2 rounded-xl text-center">★ Save to Nexo Wallet</div>
+                  <div class="w-full bg-indigo-600 text-white text-[10px] font-bold py-2 rounded-xl text-center">Save Contact to Phone</div>
+                </div>
+
+                <!-- Location Box -->
+                <div class="mx-3 bg-white p-2.5 rounded-xl border border-slate-200 text-left">
+                  <div class="text-[9px] font-extrabold text-slate-900 mb-1 flex items-center gap-1">📍 Office Location</div>
+                  <div class="text-[8px] text-slate-500 mb-2">Main Road, Tiruchengodu Tk, Namakkal Dt - 637202</div>
+                  <div class="w-full bg-slate-100 text-slate-800 text-[8px] font-bold py-1.5 rounded-lg text-center">Open in Google Maps &rsaquo;</div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         3. SECTION — THE PROBLEM
+         ========================================================================= -->
+    <section class="py-12 px-4 bg-white border-t border-slate-100">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-6">
+          Your paper visiting card has limits.
+        </h2>
+
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-8">
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+            <div class="text-2xl mb-1">🗑️</div>
+            <div class="text-xs font-semibold text-slate-700">Gets Lost</div>
+          </div>
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+            <div class="text-2xl mb-1">💦</div>
+            <div class="text-xs font-semibold text-slate-700">Gets Damaged</div>
+          </div>
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+            <div class="text-2xl mb-1">❌</div>
+            <div class="text-xs font-semibold text-slate-700">Outdated Info</div>
+          </div>
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+            <div class="text-2xl mb-1">📦</div>
+            <div class="text-xs font-semibold text-slate-700">Hard to Share</div>
+          </div>
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80 col-span-2 sm:col-span-1">
+            <div class="text-2xl mb-1">📝</div>
+            <div class="text-xs font-semibold text-slate-700">Limited Space</div>
+          </div>
+        </div>
+
+        <p class="text-base font-bold text-indigo-600 mb-6">
+          Your digital identity shouldn't have those limits.
+        </p>
+
+        <a href="/auth/register?ref=ig_ad&offer=299_lifetime" class="inline-flex items-center gap-2 font-bold text-slate-900 underline underline-offset-4 text-sm hover:text-indigo-600 transition">
+          GO DIGITAL WITH NEXO →
+        </a>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         4. SECTION — WHAT IS NEXO? (FEATURES)
+         ========================================================================= -->
+    <section class="py-12 px-4 bg-slate-50 border-t border-slate-200/60">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-8">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">
+            One NEXO Card. Everything your customer needs.
+          </h2>
+          <p class="text-sm text-slate-600">
+            NEXO brings your professional information into one easy-to-share digital identity.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+          
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+            <div class="text-2xl mb-2">📱</div>
+            <h3 class="font-bold text-sm text-slate-900 mb-1">Digital Business Card</h3>
+            <p class="text-xs text-slate-500">Your custom digital card accessible via personalized link.</p>
+          </div>
+
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+            <div class="text-2xl mb-2">💬</div>
+            <h3 class="font-bold text-sm text-slate-900 mb-1">WhatsApp & Contact</h3>
+            <p class="text-xs text-slate-500">One-tap buttons to call or WhatsApp you directly.</p>
+          </div>
+
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+            <div class="text-2xl mb-2">📍</div>
+            <h3 class="font-bold text-sm text-slate-900 mb-1">Office Location</h3>
+            <p class="text-xs text-slate-500">Direct Google Maps navigation to your office or shop.</p>
+          </div>
+
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+            <div class="text-2xl mb-2">🔗</div>
+            <h3 class="font-bold text-sm text-slate-900 mb-1">Social Links</h3>
+            <p class="text-xs text-slate-500">Instagram, YouTube, Website and social channels in one place.</p>
+          </div>
+
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+            <div class="text-2xl mb-2">📄</div>
+            <h3 class="font-bold text-sm text-slate-900 mb-1">Clickable PDF</h3>
+            <p class="text-xs text-slate-500">Interactive PDF document ready for WhatsApp sharing.</p>
+          </div>
+
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+            <div class="text-2xl mb-2">📲</div>
+            <h3 class="font-bold text-sm text-slate-900 mb-1">QR Code</h3>
+            <p class="text-xs text-slate-500">Instant offline-to-online connection via QR scan.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         5. SECTION — CLICKABLE PDF FEATURE
+         ========================================================================= -->
+    <section class="py-12 px-4 bg-white border-t border-slate-100">
+      <div class="max-w-3xl mx-auto text-center">
+        <div class="inline-block px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-[11px] font-bold mb-3">
+          EXPORT & SHARE
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-3">
+          Your visiting card can be a PDF too.
+        </h2>
+        <p class="text-sm text-slate-600 mb-6 max-w-xl mx-auto">
+          Download your clickable NEXO PDF and share it through WhatsApp, email or anywhere you want.
+        </p>
+
+        <div class="bg-slate-900 text-white p-6 rounded-3xl mb-6 shadow-xl text-left max-w-lg mx-auto">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-4">
+            <div class="flex items-center gap-3">
+              <span class="text-3xl">📄</span>
+              <div>
+                <div class="font-bold text-sm">NEXO Clickable PDF</div>
+                <div class="text-xs text-slate-400">Interactive digital card</div>
+              </div>
+            </div>
+            <span class="text-xs bg-indigo-600 text-white px-2.5 py-1 rounded-full font-bold">Ready</span>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2 text-center text-[11px] font-bold">
+            <div class="bg-slate-800 py-2 rounded-xl text-slate-200">DOWNLOAD</div>
+            <div class="bg-slate-800 py-2 rounded-xl text-slate-200">SHARE</div>
+            <div class="bg-slate-800 py-2 rounded-xl text-slate-200">KEEP FOREVER</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         6. SECTION — QR CODE FEATURE
+         ========================================================================= -->
+    <section class="py-12 px-4 bg-slate-50 border-t border-slate-200/60">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-3">
+          One QR. Instant connection.
+        </h2>
+        <p class="text-sm text-slate-600 mb-6">
+          Let customers scan your QR code and instantly open your professional NEXO Card.
+        </p>
+
+        <!-- QR Flow Diagram -->
+        <div class="flex items-center justify-center gap-2 max-w-md mx-auto mb-8 text-center">
+          <div class="bg-white p-3 rounded-2xl border border-slate-200 flex-1 shadow-sm">
+            <div class="text-2xl mb-1">📷</div>
+            <div class="text-xs font-bold text-slate-800">Scan</div>
+          </div>
+          <div class="text-slate-400 font-bold">→</div>
+          <div class="bg-white p-3 rounded-2xl border border-slate-200 flex-1 shadow-sm">
+            <div class="text-2xl mb-1">⚡</div>
+            <div class="text-xs font-bold text-slate-800">Open Card</div>
+          </div>
+          <div class="text-slate-400 font-bold">→</div>
+          <div class="bg-white p-3 rounded-2xl border border-slate-200 flex-1 shadow-sm">
+            <div class="text-2xl mb-1">🤝</div>
+            <div class="text-xs font-bold text-slate-800">Connect</div>
+          </div>
+        </div>
+
+        <a href="/auth/register?ref=ig_ad&offer=299_lifetime" class="btn-cta-primary max-w-md mx-auto">
+          <span>CREATE MY NEXO CARD</span>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         7. SECTION — HOW IT WORKS (3 SIMPLE STEPS)
+         ========================================================================= -->
+    <section class="py-12 px-4 bg-white border-t border-slate-100">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-8">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">
+            Create your NEXO Card in 3 simple steps.
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          
+          <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 relative">
+            <div class="w-8 h-8 rounded-full bg-slate-900 text-white font-extrabold text-xs flex items-center justify-center mb-3">1</div>
+            <h3 class="font-extrabold text-base text-slate-900 mb-1">CREATE</h3>
+            <p class="text-xs text-slate-600">Enter your professional details and business information.</p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 relative">
+            <div class="w-8 h-8 rounded-full bg-slate-900 text-white font-extrabold text-xs flex items-center justify-center mb-3">2</div>
+            <h3 class="font-extrabold text-base text-slate-900 mb-1">CUSTOMIZE</h3>
+            <p class="text-xs text-slate-600">Add your photo, contact details, social links and office location.</p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 relative">
+            <div class="w-8 h-8 rounded-full bg-slate-900 text-white font-extrabold text-xs flex items-center justify-center mb-3">3</div>
+            <h3 class="font-extrabold text-base text-slate-900 mb-1">SHARE</h3>
+            <p class="text-xs text-slate-600">Share your NEXO Card link, QR code or clickable PDF anywhere.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         8. SECTION — MAJOR PRICE & CONVERSION BLOCK
+         ========================================================================= -->
+    <section class="py-14 px-4 bg-slate-950 text-white relative overflow-hidden" id="pricing-section">
+      <div class="max-w-xl mx-auto text-center relative z-10">
+        
+        <h2 class="text-3xl font-black mb-2 text-white">Go Digital Today.</h2>
+        <p class="text-slate-400 text-sm mb-6">Simple, honest pricing with zero hidden fees.</p>
+
+        <!-- Main Card -->
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl mb-6">
+          
+          <div class="text-5xl font-black text-emerald-400 mb-1">₹299</div>
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-6">
+            ONE-TIME PAYMENT • LIFETIME ACCESS
+          </div>
+
+          <div class="space-y-3 text-left text-xs font-semibold text-slate-300 mb-8 border-t border-slate-800 pt-6">
+            <div class="flex items-center gap-2"><span class="text-emerald-400 font-bold">✓</span> Digital Business Card</div>
+            <div class="flex items-center gap-2"><span class="text-emerald-400 font-bold">✓</span> QR Code Included</div>
+            <div class="flex items-center gap-2"><span class="text-emerald-400 font-bold">✓</span> WhatsApp & Contact Buttons</div>
+            <div class="flex items-center gap-2"><span class="text-emerald-400 font-bold">✓</span> Social Media Links</div>
+            <div class="flex items-center gap-2"><span class="text-emerald-400 font-bold">✓</span> Google Maps Location</div>
+            <div class="flex items-center gap-2"><span class="text-emerald-400 font-bold">✓</span> Clickable PDF Export</div>
+            <div class="flex items-center gap-2"><span class="text-emerald-400 font-bold">✓</span> Unlimited Sharing</div>
+          </div>
+
+          <a href="/auth/register?ref=ig_ad&offer=299_lifetime" id="price-cta" class="btn-cta-primary">
+            <span>GET MY NEXO CARD FOR ₹299</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </a>
+
+          <div class="text-[11px] text-slate-400 font-semibold mt-3">
+            No monthly subscription.
+          </div>
+        </div>
+
+        <!-- Purchase Friction Reduction -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-center text-[11px] font-semibold text-slate-400">
+          <div>✓ One-time payment</div>
+          <div>✓ Lifetime access</div>
+          <div>✓ Easy setup</div>
+          <div>✓ Mobile friendly</div>
+          <div>✓ Share anywhere</div>
+          <div>✓ Instant creation</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         9. TRUST & REASSURANCE SECTION
+         ========================================================================= -->
+    <section class="py-10 px-4 bg-white border-t border-slate-100">
+      <div class="max-w-2xl mx-auto text-center">
+        <h3 class="text-base font-extrabold text-slate-900 mb-4">
+          Built for professionals who want to look professional.
+        </h3>
+        <div class="flex flex-wrap justify-center gap-2 text-xs font-semibold text-slate-600">
+          <span class="bg-slate-100 px-3 py-1.5 rounded-full">Easy to share</span>
+          <span class="bg-slate-100 px-3 py-1.5 rounded-full">Works on all smartphones</span>
+          <span class="bg-slate-100 px-3 py-1.5 rounded-full">Professional digital identity</span>
+          <span class="bg-slate-100 px-3 py-1.5 rounded-full">QR-ready</span>
+          <span class="bg-slate-100 px-3 py-1.5 rounded-full">WhatsApp-ready</span>
+          <span class="bg-slate-100 px-3 py-1.5 rounded-full">Clickable PDF</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         10. SECTION — FREQUENTLY ASKED QUESTIONS (FAQ)
+         ========================================================================= -->
+    <section class="py-12 px-4 bg-slate-50 border-t border-slate-200/60">
+      <div class="max-w-xl mx-auto">
+        <h2 class="text-2xl font-extrabold text-slate-900 text-center mb-6">
+          Frequently Asked Questions
+        </h2>
+
+        <div class="space-y-2.5">
+          
+          <div class="faq-item">
+            <button type="button" class="w-full text-left p-4 font-bold text-sm text-slate-900 flex justify-between items-center gap-2">
+              <span>Is ₹299 a monthly payment?</span>
+              <span class="faq-icon transition-transform font-bold text-slate-400">↓</span>
+            </button>
+            <div class="faq-answer px-4 text-xs text-slate-600 leading-relaxed">
+              No. ₹299 is a one-time payment for lifetime access. There are no monthly or yearly subscriptions.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button type="button" class="w-full text-left p-4 font-bold text-sm text-slate-900 flex justify-between items-center gap-2">
+              <span>Can I share my NEXO Card through WhatsApp?</span>
+              <span class="faq-icon transition-transform font-bold text-slate-400">↓</span>
+            </button>
+            <div class="faq-answer px-4 text-xs text-slate-600 leading-relaxed">
+              Yes. Your NEXO Card can be easily shared through WhatsApp, social media, SMS, or email with one click.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button type="button" class="w-full text-left p-4 font-bold text-sm text-slate-900 flex justify-between items-center gap-2">
+              <span>Can I download my NEXO Card as a PDF?</span>
+              <span class="faq-icon transition-transform font-bold text-slate-400">↓</span>
+            </button>
+            <div class="faq-answer px-4 text-xs text-slate-600 leading-relaxed">
+              Yes. You can download and share your interactive clickable PDF directly with your contacts.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button type="button" class="w-full text-left p-4 font-bold text-sm text-slate-900 flex justify-between items-center gap-2">
+              <span>Can I update my details later?</span>
+              <span class="faq-icon transition-transform font-bold text-slate-400">↓</span>
+            </button>
+            <div class="faq-answer px-4 text-xs text-slate-600 leading-relaxed">
+              Yes. Your professional information can be updated anytime through your NEXO dashboard.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button type="button" class="w-full text-left p-4 font-bold text-sm text-slate-900 flex justify-between items-center gap-2">
+              <span>Do I need an app?</span>
+              <span class="faq-icon transition-transform font-bold text-slate-400">↓</span>
+            </button>
+            <div class="faq-answer px-4 text-xs text-slate-600 leading-relaxed">
+              No. Your NEXO Card can be accessed and shared digitally on any device web browser.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button type="button" class="w-full text-left p-4 font-bold text-sm text-slate-900 flex justify-between items-center gap-2">
+              <span>How do I create my NEXO Card?</span>
+              <span class="faq-icon transition-transform font-bold text-slate-400">↓</span>
+            </button>
+            <div class="faq-answer px-4 text-xs text-slate-600 leading-relaxed">
+              Click 'Create My NEXO Card', complete your quick registration, enter your business details and continue through the creation flow.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         11. FINAL CTA SECTION
+         ========================================================================= -->
+    <section class="py-14 px-4 bg-gradient-to-br from-indigo-700 via-indigo-800 to-slate-900 text-white text-center">
+      <div class="max-w-xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl font-black mb-2">Still using paper?</h2>
+        <p class="text-indigo-200 text-sm mb-6">Make the switch to NEXO today.</p>
+
+        <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 max-w-sm mx-auto mb-6">
+          <div class="text-3xl font-black text-emerald-300">₹299</div>
+          <div class="text-[10px] font-extrabold uppercase text-indigo-100">ONE-TIME PAYMENT • LIFETIME ACCESS</div>
+        </div>
+
+        <a href="/auth/register?ref=ig_ad&offer=299_lifetime" id="final-cta" class="btn-cta-primary max-w-md mx-auto mb-4">
+          <span>CREATE MY NEXO CARD</span>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+
+        <div class="text-xs text-indigo-200 font-semibold tracking-wider uppercase">Your World. One Link.</div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="py-6 px-4 bg-slate-950 text-slate-500 text-center text-xs border-t border-slate-900">
+    <div class="max-w-xl mx-auto">
+      &copy; NEXO Digital Card. All rights reserved.
+    </div>
+  </footer>
+
+  <!-- =========================================================================
+       12. COMPACT STICKY MOBILE CTA BAR
+       ========================================================================= -->
+  <div class="fixed bottom-0 left-0 right-0 p-3 bg-white/95 backdrop-blur-md border-t border-slate-200 z-50 shadow-2xl">
+    <div class="max-w-md mx-auto flex items-center gap-2">
+      <a href="/auth/register?ref=ig_ad&offer=299_lifetime" id="create-nexo-card" class="btn-sticky-bar">
+        <span>CREATE MY NEXO CARD — ₹299</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- JavaScript for Interactive Accordion and Conversion Tracking -->
+  <script>
+    // FAQ Accordion Handler
+    document.querySelectorAll('.faq-item button').forEach(button => {
+      button.addEventListener('click', () => {
+        const item = button.parentElement;
+        const isOpen = item.classList.contains('open');
+        
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        
+        if (!isOpen) {
+          item.classList.add('open');
+        }
+      });
+    });
+
+    // Conversion Analytics Hooks
+    const ctaIds = ['hero-cta', 'price-cta', 'final-cta', 'create-nexo-card'];
+    ctaIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('click', () => {
+          if (typeof window.gtag === 'function') {
+            window.gtag('event', 'click_landing_cta', {
+              event_category: 'conversion',
+              event_label: id,
+              value: 299
+            });
+          }
+          if (typeof window.fbq === 'function') {
+            window.fbq('track', 'InitiateCheckout', { value: 299, currency: 'INR' });
+          }
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>
