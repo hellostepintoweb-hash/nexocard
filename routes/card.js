@@ -11,6 +11,77 @@ const ensureAuth = (req, res, next) => {
   res.redirect('/auth/login');
 };
 
+// =====================================================
+// CHECK HANDLE / SLUG AVAILABILITY
+// GET /api/check-slug/:slug
+// =====================================================
+router.get('/api/check-slug/:slug', async (req, res) => {
+  try {
+    const slug = (req.params.slug || '').trim().toLowerCase();
+    const currentCardId = req.query.cardId || null;
+
+    // Basic validation
+    if (!slug) {
+      return res.status(400).json({
+        available: false,
+        message: 'Slug is required'
+      });
+    }
+
+    // Only allow safe characters
+    if (!/^[a-z0-9-]+$/.test(slug)) {
+      return res.status(200).json({
+        available: false,
+        handle: slug,
+        message: 'Only letters, numbers and hyphens are allowed'
+      });
+    }
+
+    // Find an existing card with this handle
+    const existingCard = await Card.findOne({
+      handle: slug
+    }).select('_id handle');
+
+    // Editing an existing card:
+    // If this is the same card, the slug is still available.
+    if (
+      existingCard &&
+      currentCardId &&
+      existingCard._id.toString() === currentCardId.toString()
+    ) {
+      return res.status(200).json({
+        available: true,
+        handle: slug,
+        message: 'Slug is available'
+      });
+    }
+
+    // Slug already belongs to another card
+    if (existingCard) {
+      return res.status(200).json({
+        available: false,
+        handle: slug,
+        message: 'Slug is already taken'
+      });
+    }
+
+    // Slug is free
+    return res.status(200).json({
+      available: true,
+      handle: slug,
+      message: 'Slug is available'
+    });
+
+  } catch (error) {
+    console.error('Slug availability check error:', error);
+
+    return res.status(500).json({
+      available: false,
+      message: 'Unable to check slug availability'
+    });
+  }
+});
+
 router.get('/card/new', ensureAuth, (req, res) => {
   res.render('card/builder', {
     title: 'Create Digital Card | NEXO',
