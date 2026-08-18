@@ -84,7 +84,7 @@ app.use('/', landingRoutes);
 app.use('/', require('./routes/dashboard'));
 app.use('/', require('./routes/wallet'));
 app.use('/', require('./routes/payment'));
-
+app.use('/', require('./routes/analytics'));
 // Add corporate route registration directly before dynamic card handle matching
 app.use('/', require('./routes/corporate'));
 
