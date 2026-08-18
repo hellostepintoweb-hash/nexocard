@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Card = require('../models/card');
 const upload = require('../middleware/upload');
+const Analytics = require('../models/Analytics');
 const { uploadToCloudinary } = require('../config/cloudinary');
 
 const ensureAuth = (req, res, next) => {
@@ -263,6 +264,13 @@ router.get('/c/:handle', async (req, res) => {
       return res.status(404).render('404', { message: 'Nexo Profile Card not found.' });
     }
 
+    await Analytics.findOneAndUpdate(
+      { card: card._id },
+      { $inc: { views: 1 } },
+      { upsert: true, new: true }
+    );
+    // --------------------------------------------
+
     // 2. Wallet check (unmodified)
     let isSavedInWallet = false;
     if (req.isAuthenticated() && req.user && req.user.wallet) {
@@ -461,6 +469,7 @@ router.get('/c/:handle/vcard', async (req, res) => {
     return res.status(500).render('404', { message: 'Error generating contact file.' });
   }
 });
+
 
 
 
