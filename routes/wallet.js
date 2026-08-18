@@ -68,6 +68,11 @@ router.post('/wallet/save/:cardId', async (req, res) => {
       { $addToSet: { savedCards: cardId } },
       { upsert: true, new: true }
     );
+    await Analytics.findOneAndUpdate(
+      { card: cardId },
+      { $inc: { saves: 1 } },
+      { upsert: true }
+    );
 
     return res.status(200).json({
       success: true,
