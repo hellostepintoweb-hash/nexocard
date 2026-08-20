@@ -105,8 +105,6 @@ router.get('/reset-password', ensureGuest, (req, res) => {
   res.render('auth/reset-password', { error: null, success: null });
 });
 
-// @desc    Update Password Directly via Email
-// @route   POST /auth/reset-password
 router.post('/reset-password', ensureGuest, async (req, res) => {
   const { email, password, confirmPassword } = req.body;
 
@@ -115,22 +113,22 @@ router.post('/reset-password', ensureGuest, async (req, res) => {
       return res.render('auth/reset-password', { error: 'Passwords do not match', success: null });
     }
 
-    const user = await User.findOne({ email: email.toLowerCase() });
+    const user = await User.findOne({ email: email.trim().toLowerCase() });
     if (!user) {
       return res.render('auth/reset-password', { error: 'No account found with that email address', success: null });
     }
 
-    // Update password
-    user.password = password; // Ensure your User model pre-save hook hashes the password, or hash here
+    // Assign raw password so pre-save hook triggers hashing
+    user.password = password;
+    user.markModified('password'); // Forces Mongoose to recognize password changed
     await user.save();
 
-    res.render('auth/login', { error: 'Password updated successfully. Please sign in with your new password.', redirect: '' });
+    return res.render('auth/login', { error: 'Password updated successfully!', redirect: '' });
   } catch (err) {
     console.error(err);
-    res.render('auth/reset-password', { error: 'An error occurred while resetting the password.', success: null });
+    return res.render('auth/reset-password', { error: 'An error occurred', success: null });
   }
 });
-
 
 
 module.exports = router;
